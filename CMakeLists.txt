@@ -7,6 +7,9 @@ setup_os_vars()
 include(importNode)
 
 set(SRC "src/main.cpp")
+if(WIN32)
+    set(PLATFORM_SRC "app.manifest")
+endif()
 
-add_library(ml64fx SHARED ${SRC})
+add_library(ml64fx SHARED ${SRC} ${PLATFORM_SRC})
 configure_node_module(ml64fx)
