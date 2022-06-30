@@ -13,4 +13,4 @@ Napi::Object initModule(Napi::Env env, Napi::Object exports)
     return exports;
 }
 
-NODE_API_MODULE(addonModule, initModule)
+NODE_API_MODULE(ml64fxModule, initModule)

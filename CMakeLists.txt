@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
-project("NodeAddonTemplateCpp")
+project(ml64fx)
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 include(initProject)
@@ -8,5 +8,5 @@ include(importNode)
 
 set(SRC "src/main.cpp")
 
-add_library(addon SHARED ${SRC})
-configure_node_module(addon)
+add_library(ml64fx SHARED ${SRC})
+configure_node_module(ml64fx)

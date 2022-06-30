@@ -1,2 +1,2 @@
-import * as a from 'addon'
+import * as a from 'ml64fx'
 a.helloWorld();
