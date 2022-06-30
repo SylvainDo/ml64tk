@@ -1,0 +1,18 @@
+root = true
+
+[.editorconfig]
+insert_final_newline = true
+
+[{*.cpp,*.hpp,*.ts}]
+indent_style = space
+indent_size = 4
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+[{CMakeLists.txt,*.cmake}]
+indent_style = tab
+indent_size = 4
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
