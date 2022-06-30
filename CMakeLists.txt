@@ -16,4 +16,5 @@ if(WIN32)
 endif()
 
 add_library(ml64fx SHARED ${SRC} ${PLATFORM_SRC})
+target_include_directories(ml64fx PRIVATE "${CMAKE_SOURCE_DIR}/src")
 configure_node_module(ml64fx)
