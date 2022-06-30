@@ -8,5 +8,5 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Sylvain",
-  "license": "ISC"
+  "license": "GPL-3.0-or-later"
 }
