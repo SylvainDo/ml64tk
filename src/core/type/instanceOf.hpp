@@ -15,4 +15,9 @@ bool isInstanceOf(const Napi::Value& value) {
     return asSize(obj.Get("typeId")) == typeid(T).hash_code();
 }
 
+template <class T>
+Napi::Value fromTypeId(Napi::Env env) {
+    return convert::fromSize(env, typeid(T).hash_code());
+}
+
 }

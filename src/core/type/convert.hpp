@@ -63,7 +63,9 @@ inline std::uint32_t asU32Or(const Napi::Value& value, std::uint32_t defaultValu
 
 inline std::uint64_t asU64(const Napi::Value& value) {
     bool lossless;
-    return valueAsBigInt(value).Uint64Value(&lossless);
+    const auto v = valueAsBigInt(value).Uint64Value(&lossless);
+    if (!lossless) throw Napi::Error::New(value.Env(), "couldn't convert bigint to unsigned long long losslessly");
+    return v;
 }
 
 inline std::uint64_t asU64Or(const Napi::Value& value, std::uint64_t defaultValue) {
@@ -96,7 +98,9 @@ inline std::int32_t asS32Or(const Napi::Value& value, std::int32_t defaultValue)
 
 inline std::int64_t asS64(const Napi::Value& value) {
     bool lossless;
-    return valueAsBigInt(value).Int64Value(&lossless);
+    const auto v = valueAsBigInt(value).Int64Value(&lossless);
+    if (!lossless) throw Napi::Error::New(value.Env(), "couldn't convert bigint to long long losslessly");
+    return v;
 }
 
 inline std::int64_t asS64Or(const Napi::Value& value, std::int64_t defaultValue) {
@@ -211,12 +215,28 @@ inline Napi::Value fromBool(Napi::Env env, bool value) {
     return Napi::Boolean::New(env, value);
 }
 
+inline Napi::Value fromStrUtf8(Napi::Env env, const char* value) {
+    return Napi::String::New(env, value);
+}
+
+inline Napi::Value fromStrUtf8(Napi::Env env, const char* value, std::size_t length) {
+    return Napi::String::New(env, value, length);
+}
+
 inline Napi::Value fromStrUtf8(Napi::Env env, const std::string& value) {
     return Napi::String::New(env, value);
 }
 
 inline Napi::Value fromStrUtf8(Napi::Env env, std::string_view value) {
     return Napi::String::New(env, value.data(), value.size());
+}
+
+inline Napi::Value fromStrUtf16(Napi::Env env, const char16_t* value) {
+    return Napi::String::New(env, value);
+}
+
+inline Napi::Value fromStrUtf16(Napi::Env env, const char16_t* value, std::size_t length) {
+    return Napi::String::New(env, value, length);
 }
 
 inline Napi::Value fromStrUtf16(Napi::Env env, const std::u16string& value) {
@@ -228,7 +248,8 @@ inline Napi::Value fromStrUtf16(Napi::Env env, std::u16string_view value) {
 }
 
 inline Napi::Value fromPath(Napi::Env env, const std::filesystem::path& value) {
-    return Napi::String::New(env, value.generic_u8string());
+    const auto str = value.generic_u8string();
+    return Napi::String::New(env, reinterpret_cast<const char*>(str.data()), str.size());
 }
 
 inline Napi::Value fromSize(Napi::Env env, std::size_t size) {
