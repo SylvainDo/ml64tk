@@ -1,0 +1,11 @@
+{
+    "cmake.configureSettings": {
+        "CMAKE_BUILD_TYPE": "${buildType}",
+        "CMAKE_TOOLCHAIN_FILE": "D:/dev/vcpkg/scripts/buildsystems/vcpkg.cmake",
+        "VCPKG_DIR": "D:/dev/vcpkg",
+        "VCPKG_TARGET_TRIPLET": "x64-windows-static",
+        "NODE_DEV_DIR": "D:/dev/nodejs-addon-sdk/node-v16.15.1",
+        "NODE_ADDON_DEV_DIR": "D:/dev/nodejs-addon-sdk/node-addon-api-5.0.0",
+        "NODE_HOST_BINARY": "NODE.EXE"
+    }
+}

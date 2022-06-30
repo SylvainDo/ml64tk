@@ -1,0 +1,11 @@
+/.vs
+/.vscode/*
+!/.vscode/launch.json
+!/.vscode/settings.json
+!/.vscode/settings (Linux).json
+/bin/*
+!/bin/addon.js
+/build
+/out
+/test/bin
+node_modules
