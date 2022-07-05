@@ -10,6 +10,8 @@ set(SRC
 	"src/main.cpp"
 	"src/core/type/convert.hpp"
 	"src/core/type/instanceOf.hpp"
+	"src/core/byteswap.hpp"
+	"src/core/largeInteger.hpp"
 	)
 if(WIN32)
     set(PLATFORM_SRC "app.manifest")

@@ -1,15 +1,9 @@
-#include <iostream>
-#include <napi.h>
+#include "core/largeInteger.hpp"
 
-Napi::Value helloWorld(const Napi::CallbackInfo& info)
-{
-    std::cout << "hello, world!" << std::endl;
-    return info.Env().Undefined();
-}
+Napi::Object initModule(Napi::Env env, Napi::Object exports) {
+    core::SignedLargeInteger::initialize(env, exports);
+    core::UnsignedLargeInteger::initialize(env, exports);
 
-Napi::Object initModule(Napi::Env env, Napi::Object exports)
-{
-    exports.Set("helloWorld", Napi::Function::New(env, helloWorld));
     return exports;
 }
 
