@@ -7,5 +7,7 @@
 !/bin/addon.js
 /build
 /out
+/test/assets
 /test/bin
+/test/imgui.ini
 node_modules
