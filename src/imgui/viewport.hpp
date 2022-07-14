@@ -9,7 +9,7 @@ namespace imgui {
 class Viewport final : public Napi::ObjectWrap<Viewport> {
 public:
     static Napi::Object initialize(Napi::Env env, Napi::Object exports);
-    static Napi::Object create(Napi::Env env, ImGuiViewport* val);
+    static Napi::Object create(Napi::Env, ImGuiViewport* val);
 
     static Viewport* unwrap(const Napi::Object& obj) {
         return Viewport::Unwrap(obj);

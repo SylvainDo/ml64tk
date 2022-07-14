@@ -9,7 +9,7 @@ namespace imgui {
 class Style final : public Napi::ObjectWrap<Style> {
 public:
     static Napi::Object initialize(Napi::Env env, Napi::Object exports);
-    static Napi::Object create(Napi::Env env, ImGuiStyle* val);
+    static Napi::Object create(Napi::Env, ImGuiStyle* val);
 
     static Style* unwrap(const Napi::Object& obj) {
         return Style::Unwrap(obj);

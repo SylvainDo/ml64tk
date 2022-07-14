@@ -132,7 +132,7 @@ napi_status napi_object_freeze(napi_env env, napi_value object) { return pfn_nap
 napi_status napi_object_seal(napi_env env, napi_value object) { return pfn_napi_object_seal(env, object); }
 
 void napi_module_register(napi_module* mod) { return pfn_napi_module_register(mod); }
-void napi_fatal_error(const char* location, size_t location_len, const char* message, size_t message_len) { return pfn_napi_fatal_error(location, location_len, message, message_len); }
+void napi_fatal_error(const char* location, size_t location_len, const char* message, size_t message_len) { pfn_napi_fatal_error(location, location_len, message, message_len); }
 napi_status napi_async_init(napi_env env, napi_value async_resource, napi_value async_resource_name, napi_async_context* result) { return pfn_napi_async_init(env, async_resource, async_resource_name, result); }
 napi_status napi_async_destroy(napi_env env, napi_async_context async_context) { return pfn_napi_async_destroy(env, async_context); }
 napi_status napi_make_callback(napi_env env, napi_async_context async_context, napi_value recv, napi_value func, size_t argc, const napi_value* argv, napi_value* result) { return pfn_napi_make_callback(env, async_context, recv, func, argc, argv, result); }

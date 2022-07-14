@@ -72,7 +72,7 @@ Napi::Object Style::initialize(Napi::Env env, Napi::Object exports) {
     return exports;
 }
 
-Napi::Object Style::create(Napi::Env env, ImGuiStyle* val) {
+Napi::Object Style::create(Napi::Env, ImGuiStyle* val) {
     const auto obj = m_ctor.New({ m_ctor.Value() });
     unwrap(obj)->m_val = val;
     return obj;

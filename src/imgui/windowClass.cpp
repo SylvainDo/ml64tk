@@ -36,7 +36,7 @@ Napi::Object WindowClass::initialize(Napi::Env env, Napi::Object exports) {
     return exports;
 }
 
-Napi::Object WindowClass::create(Napi::Env env, ImGuiWindowClass* val) {
+Napi::Object WindowClass::create(Napi::Env, ImGuiWindowClass* val) {
     const auto obj = m_ctor.New({ m_ctor.Value() });
     unwrap(obj)->m_val = val;
     return obj;

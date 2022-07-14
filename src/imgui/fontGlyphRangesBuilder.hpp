@@ -8,7 +8,7 @@ namespace imgui {
 class FontGlyphRangesBuilder final : public Napi::ObjectWrap<FontGlyphRangesBuilder> {
 public:
     static Napi::Object initialize(Napi::Env env, Napi::Object exports);
-    static Napi::Object create(Napi::Env env);
+    static Napi::Object create(Napi::Env);
 
     static FontGlyphRangesBuilder* unwrap(const Napi::Object& obj) {
         return FontGlyphRangesBuilder::Unwrap(obj);

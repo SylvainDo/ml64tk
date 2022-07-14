@@ -43,7 +43,7 @@ Napi::Object Font::initialize(Napi::Env env, Napi::Object exports) {
     return exports;
 }
 
-Napi::Object Font::create(Napi::Env env, ImFont* val) {
+Napi::Object Font::create(Napi::Env, ImFont* val) {
     const auto obj = m_ctor.New({});
     unwrap(obj)->m_val = val;
     return obj;

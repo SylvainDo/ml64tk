@@ -32,7 +32,7 @@ Napi::Object TableColumnSortSpecs::initialize(Napi::Env env, Napi::Object export
     return exports;
 }
 
-Napi::Object TableColumnSortSpecs::create(Napi::Env env, ImGuiTableColumnSortSpecs* val) {
+Napi::Object TableColumnSortSpecs::create(Napi::Env, ImGuiTableColumnSortSpecs* val) {
     const auto obj = m_ctor.New({});
     unwrap(obj)->m_val = val;
     return obj;

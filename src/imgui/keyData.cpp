@@ -32,7 +32,7 @@ Napi::Object KeyData::initialize(Napi::Env env, Napi::Object exports) {
     return exports;
 }
 
-Napi::Object KeyData::create(Napi::Env env, ImGuiKeyData* val) {
+Napi::Object KeyData::create(Napi::Env, ImGuiKeyData* val) {
     const auto obj = m_ctor.New({ m_ctor.Value() });
     unwrap(obj)->m_val = val;
     return obj;

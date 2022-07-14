@@ -147,7 +147,7 @@ Napi::Object IO::initialize(Napi::Env env, Napi::Object exports) {
     return exports;
 }
 
-Napi::Object IO::create(Napi::Env env, ImGuiIO* val) {
+Napi::Object IO::create(Napi::Env, ImGuiIO* val) {
     const auto obj = m_ctor.New({});
     unwrap(obj)->m_val = val;
     return obj;

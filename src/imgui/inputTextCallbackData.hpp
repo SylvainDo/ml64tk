@@ -9,7 +9,7 @@ namespace imgui {
 class InputTextCallbackData final : public Napi::ObjectWrap<InputTextCallbackData> {
 public:
     static Napi::Object initialize(Napi::Env env, Napi::Object exports);
-    static Napi::Object create(Napi::Env env, ImGuiInputTextCallbackData* val);
+    static Napi::Object create(Napi::Env, ImGuiInputTextCallbackData* val);
 
     static InputTextCallbackData* unwrap(const Napi::Object& obj) {
         return InputTextCallbackData::Unwrap(obj);

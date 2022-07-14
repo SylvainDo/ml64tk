@@ -9,7 +9,7 @@ namespace imgui {
 class TableColumnSortSpecs final : public Napi::ObjectWrap<TableColumnSortSpecs> {
 public:
     static Napi::Object initialize(Napi::Env env, Napi::Object exports);
-    static Napi::Object create(Napi::Env env, ImGuiTableColumnSortSpecs* val);
+    static Napi::Object create(Napi::Env, ImGuiTableColumnSortSpecs* val);
 
     static TableColumnSortSpecs* unwrap(const Napi::Object& obj) {
         return TableColumnSortSpecs::Unwrap(obj);

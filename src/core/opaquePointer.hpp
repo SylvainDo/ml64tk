@@ -12,8 +12,8 @@ public:
     };
 
     static Napi::Object initialize(Napi::Env env, Napi::Object exports);
-    static Napi::Object create(Napi::Env env, void* val, Type type = Type::Raw);
-    static Napi::Object create(Napi::Env env, const Napi::Object& val);
+    static Napi::Object create(Napi::Env, void* val, Type type = Type::Raw);
+    static Napi::Object create(Napi::Env, const Napi::Object& val);
 
     static OpaquePointer* unwrap(const Napi::Object& obj) {
         return OpaquePointer::Unwrap(obj);

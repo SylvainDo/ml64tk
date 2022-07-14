@@ -103,7 +103,7 @@ struct LargeInteger : Napi::ObjectWrap<LargeInteger<Signed>> {
         return exports;
     }
 
-    static Napi::Object create(Napi::Env env, ValueType val) {
+    static Napi::Object create(Napi::Env, ValueType val) {
         const auto obj = constructor.New({});
         unwrap(obj)->value = val;
         return obj;
@@ -184,7 +184,7 @@ struct LargeInteger : Napi::ObjectWrap<LargeInteger<Signed>> {
         return fromU32(info.Env(), value.u.lowPart);
     }
 
-    void setLowPart(const Napi::CallbackInfo& info, const Napi::Value& value) {
+    void setLowPart(const Napi::CallbackInfo&, const Napi::Value& value) {
         using namespace core::type::convert;
         this->value.u.lowPart = asU32(value);
     }
@@ -195,7 +195,7 @@ struct LargeInteger : Napi::ObjectWrap<LargeInteger<Signed>> {
         else return fromU32(info.Env(), value.u.highPart);
     }
 
-    void setHighPart(const Napi::CallbackInfo& info, const Napi::Value& value) {
+    void setHighPart(const Napi::CallbackInfo&, const Napi::Value& value) {
         using namespace core::type::convert;
         if constexpr (Signed) this->value.u.highPart = asS32(value);
         else this->value.u.highPart = asU32(value);

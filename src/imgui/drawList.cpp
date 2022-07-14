@@ -77,7 +77,7 @@ Napi::Object DrawList::initialize(Napi::Env env, Napi::Object exports) {
     return exports;
 }
 
-Napi::Object DrawList::create(Napi::Env env, ImDrawList* val, ImVec2 origin) {
+Napi::Object DrawList::create(Napi::Env, ImDrawList* val, ImVec2 origin) {
     const auto obj = m_ctor.New({});
     auto instance = unwrap(obj);
     instance->m_val = val;

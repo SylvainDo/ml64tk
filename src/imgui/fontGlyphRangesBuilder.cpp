@@ -34,7 +34,7 @@ Napi::Object FontGlyphRangesBuilder::initialize(Napi::Env env, Napi::Object expo
     return exports;
 }
 
-Napi::Object FontGlyphRangesBuilder::create(Napi::Env env) {
+Napi::Object FontGlyphRangesBuilder::create(Napi::Env) {
     return m_ctor.New({});
 }
 

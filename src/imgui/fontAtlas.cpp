@@ -41,7 +41,7 @@ Napi::Object FontAtlas::initialize(Napi::Env env, Napi::Object exports) {
     return exports;
 }
 
-Napi::Object FontAtlas::create(Napi::Env env, ImFontAtlas* val) {
+Napi::Object FontAtlas::create(Napi::Env, ImFontAtlas* val) {
     const auto obj = m_ctor.New({});
     unwrap(obj)->m_val = val;
     return obj;

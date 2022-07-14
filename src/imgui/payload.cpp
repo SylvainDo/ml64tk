@@ -35,7 +35,7 @@ Napi::Object Payload::initialize(Napi::Env env, Napi::Object exports) {
     return exports;
 }
 
-Napi::Object Payload::create(Napi::Env env, ImGuiPayload* val) {
+Napi::Object Payload::create(Napi::Env, ImGuiPayload* val) {
     const auto obj = m_ctor.New({ m_ctor.Value() });
     unwrap(obj)->m_val = val;
     return obj;

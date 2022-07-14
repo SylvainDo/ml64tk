@@ -9,7 +9,7 @@ namespace imgui {
 class Font final : public Napi::ObjectWrap<Font> {
 public:
     static Napi::Object initialize(Napi::Env env, Napi::Object exports);
-    static Napi::Object create(Napi::Env env, ImFont* val);
+    static Napi::Object create(Napi::Env, ImFont* val);
 
     static Font* unwrap(const Napi::Object& obj) {
         return Font::Unwrap(obj);

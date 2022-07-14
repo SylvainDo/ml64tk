@@ -41,7 +41,7 @@ Napi::Object InputTextCallbackData::initialize(Napi::Env env, Napi::Object expor
     return exports;
 }
 
-Napi::Object InputTextCallbackData::create(Napi::Env env, ImGuiInputTextCallbackData* val) {
+Napi::Object InputTextCallbackData::create(Napi::Env, ImGuiInputTextCallbackData* val) {
     const auto obj = m_ctor.New({});
     unwrap(obj)->m_val = val;
     return obj;

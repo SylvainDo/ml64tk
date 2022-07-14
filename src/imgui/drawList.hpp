@@ -11,7 +11,7 @@ namespace imgui {
 class DrawList final : public Napi::ObjectWrap<DrawList> {
 public:
     static Napi::Object initialize(Napi::Env env, Napi::Object exports);
-    static Napi::Object create(Napi::Env env, ImDrawList* val, ImVec2 origin);
+    static Napi::Object create(Napi::Env, ImDrawList* val, ImVec2 origin);
 
     static DrawList* unwrap(const Napi::Object& obj) {
         return DrawList::Unwrap(obj);

@@ -43,7 +43,7 @@ Napi::Object Viewport::initialize(Napi::Env env, Napi::Object exports) {
     return exports;
 }
 
-Napi::Object Viewport::create(Napi::Env env, ImGuiViewport* val) {
+Napi::Object Viewport::create(Napi::Env, ImGuiViewport* val) {
     const auto obj = m_ctor.New({});
     unwrap(obj)->m_val = val;
     return obj;

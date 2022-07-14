@@ -33,7 +33,7 @@ Napi::Object OpaquePointer::initialize(Napi::Env env, Napi::Object exports) {
     return exports;
 }
 
-Napi::Object OpaquePointer::create(Napi::Env env, void* val, Type type) {
+Napi::Object OpaquePointer::create(Napi::Env, void* val, Type type) {
     const auto obj = m_ctor.New({});
     auto instance = unwrap(obj);
     instance->m_val = val;
@@ -41,7 +41,7 @@ Napi::Object OpaquePointer::create(Napi::Env env, void* val, Type type) {
     return obj;
 }
 
-Napi::Object OpaquePointer::create(Napi::Env env, const Napi::Object& val) {
+Napi::Object OpaquePointer::create(Napi::Env, const Napi::Object& val) {
     const auto obj = m_ctor.New({});
     auto instance = unwrap(obj);
     auto ref = new Napi::ObjectReference;

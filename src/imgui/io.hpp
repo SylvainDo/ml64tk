@@ -9,7 +9,7 @@ namespace imgui {
 class IO final : public Napi::ObjectWrap<IO> {
 public:
     static Napi::Object initialize(Napi::Env env, Napi::Object exports);
-    static Napi::Object create(Napi::Env env, ImGuiIO* val);
+    static Napi::Object create(Napi::Env, ImGuiIO* val);
 
     static IO* unwrap(const Napi::Object& obj) {
         return IO::Unwrap(obj);

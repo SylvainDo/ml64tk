@@ -803,7 +803,7 @@ bool callbackComboArray(void* data, int idx, const char** out_text) {
     }
     *out_text = std::strcpy(buf, str.c_str());
 
-    return idx < udata->Value().Length();
+    return idx < static_cast<int>(udata->Value().Length());
 }
 
 struct callbackComboFunctionData {

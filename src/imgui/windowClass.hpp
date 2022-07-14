@@ -9,7 +9,7 @@ namespace imgui {
 class WindowClass final : public Napi::ObjectWrap<WindowClass> {
 public:
     static Napi::Object initialize(Napi::Env env, Napi::Object exports);
-    static Napi::Object create(Napi::Env env, ImGuiWindowClass* val);
+    static Napi::Object create(Napi::Env, ImGuiWindowClass* val);
 
     static WindowClass* unwrap(const Napi::Object& obj) {
         return WindowClass::Unwrap(obj);

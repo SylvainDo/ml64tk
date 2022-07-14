@@ -9,7 +9,7 @@ namespace imgui {
 class SizeCallbackData final : public Napi::ObjectWrap<SizeCallbackData> {
 public:
     static Napi::Object initialize(Napi::Env env, Napi::Object exports);
-    static Napi::Object create(Napi::Env env, ImGuiSizeCallbackData* val);
+    static Napi::Object create(Napi::Env, ImGuiSizeCallbackData* val);
 
     static SizeCallbackData* unwrap(const Napi::Object& obj) {
         return SizeCallbackData::Unwrap(obj);

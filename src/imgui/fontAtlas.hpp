@@ -8,7 +8,7 @@ namespace imgui {
 class FontAtlas final : public Napi::ObjectWrap<FontAtlas> {
 public:
     static Napi::Object initialize(Napi::Env env, Napi::Object exports);
-    static Napi::Object create(Napi::Env env, ImFontAtlas* val);
+    static Napi::Object create(Napi::Env, ImFontAtlas* val);
 
     static FontAtlas* unwrap(const Napi::Object& obj) {
         return FontAtlas::Unwrap(obj);

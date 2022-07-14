@@ -41,7 +41,7 @@ Napi::Object FontConfig::initialize(Napi::Env env, Napi::Object exports) {
     return exports;
 }
 
-Napi::Object FontConfig::create(Napi::Env env) {
+Napi::Object FontConfig::create(Napi::Env) {
     return m_ctor.New({});
 }
 

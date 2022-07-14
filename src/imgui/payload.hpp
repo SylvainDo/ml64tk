@@ -9,7 +9,7 @@ namespace imgui {
 class Payload final : public Napi::ObjectWrap<Payload> {
 public:
     static Napi::Object initialize(Napi::Env env, Napi::Object exports);
-    static Napi::Object create(Napi::Env env, ImGuiPayload* val);
+    static Napi::Object create(Napi::Env, ImGuiPayload* val);
 
     static Payload* unwrap(const Napi::Object& obj) {
         return Payload::Unwrap(obj);

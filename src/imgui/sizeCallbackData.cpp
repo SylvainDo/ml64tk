@@ -32,7 +32,7 @@ Napi::Object SizeCallbackData::initialize(Napi::Env env, Napi::Object exports) {
     return exports;
 }
 
-Napi::Object SizeCallbackData::create(Napi::Env env, ImGuiSizeCallbackData* val) {
+Napi::Object SizeCallbackData::create(Napi::Env, ImGuiSizeCallbackData* val) {
     const auto obj = m_ctor.New({ m_ctor.Value() });
     unwrap(obj)->m_val = val;
     return obj;

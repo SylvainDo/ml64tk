@@ -9,7 +9,7 @@ namespace imgui {
 class KeyData final : public Napi::ObjectWrap<KeyData> {
 public:
     static Napi::Object initialize(Napi::Env env, Napi::Object exports);
-    static Napi::Object create(Napi::Env env, ImGuiKeyData* val);
+    static Napi::Object create(Napi::Env, ImGuiKeyData* val);
 
     static KeyData* unwrap(const Napi::Object& obj) {
         return KeyData::Unwrap(obj);

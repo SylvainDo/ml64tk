@@ -32,7 +32,7 @@ Napi::Object TableSortSpecs::initialize(Napi::Env env, Napi::Object exports) {
     return exports;
 }
 
-Napi::Object TableSortSpecs::create(Napi::Env env, ImGuiTableSortSpecs* val) {
+Napi::Object TableSortSpecs::create(Napi::Env, ImGuiTableSortSpecs* val) {
     const auto obj = m_ctor.New({});
     unwrap(obj)->m_val = val;
     return obj;
