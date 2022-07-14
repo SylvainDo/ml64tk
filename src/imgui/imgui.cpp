@@ -19,6 +19,8 @@
 #include "imgui/viewport.hpp"
 #include "imgui/windowClass.hpp"
 
+#include <optional>
+
 #include <imgui_internal.h>
 #include <imgui_stdlib.h>
 

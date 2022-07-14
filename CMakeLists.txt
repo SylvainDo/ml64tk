@@ -68,3 +68,8 @@ add_library(ml64fx SHARED ${SRC} ${PLATFORM_SRC})
 target_include_directories(ml64fx PRIVATE "${CMAKE_SOURCE_DIR}/src")
 target_link_libraries(ml64fx PRIVATE fmt::fmt SDL2::SDL2 OpenGL::GL glad freetype imgui SDL2::SDL2_image SDL2::SDL2_ttf)
 configure_node_module(ml64fx)
+
+if(UNIX)
+	add_subdirectory(napi-loader)
+	target_link_libraries(ml64fx PRIVATE napi-loader)
+endif()
