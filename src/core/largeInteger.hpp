@@ -39,51 +39,62 @@ struct LargeInteger : Napi::ObjectWrap<LargeInteger<Signed>> {
     static Napi::Object initialize(Napi::Env env, Napi::Object exports) {
         using ObjectWrap_t = Napi::ObjectWrap<LargeInteger<Signed>>;
 
+#ifdef _WIN32
+#define InstanceAccessor_ ObjectWrap_t::InstanceAccessor
+#define InstanceMethod_ ObjectWrap_t::InstanceMethod
+#else
+#define InstanceAccessor_ InstanceAccessor
+#define InstanceMethod_ InstanceMethod
+#endif
+
         const char* className;
         if constexpr (Signed) className = "SignedLargeInteger"; else className = "UnsignedLargeInteger";
 
         const auto class_ = ObjectWrap_t::DefineClass(env, className, {
-            ObjectWrap_t::InstanceAccessor<&LargeInteger::getTypeId>("typeId"),
-            ObjectWrap_t::InstanceAccessor<&LargeInteger::toDebugString>("debugString"),
+            InstanceAccessor_<&LargeInteger::getTypeId>("typeId"),
+            InstanceAccessor_<&LargeInteger::toDebugString>("debugString"),
 
-            ObjectWrap_t::InstanceMethod<&LargeInteger::toNumber>("toNumber"),
-            ObjectWrap_t::InstanceMethod<&LargeInteger::toString>("toString"),
-            ObjectWrap_t::InstanceMethod<&LargeInteger::toBigInt>("toBigInt"),
+            InstanceMethod_<&LargeInteger::toNumber>("toNumber"),
+            InstanceMethod_<&LargeInteger::toString>("toString"),
+            InstanceMethod_<&LargeInteger::toBigInt>("toBigInt"),
 
-            ObjectWrap_t::InstanceAccessor<&LargeInteger::getLowPart, &LargeInteger::setLowPart>("lowPart"),
-            ObjectWrap_t::InstanceAccessor<&LargeInteger::getHighPart, &LargeInteger::setHighPart>("highPart"),
-            ObjectWrap_t::InstanceAccessor<&LargeInteger::getBytes>("bytes"),
+            InstanceAccessor_<&LargeInteger::getLowPart, &LargeInteger::setLowPart>("lowPart"),
+            InstanceAccessor_<&LargeInteger::getHighPart, &LargeInteger::setHighPart>("highPart"),
+            InstanceAccessor_<&LargeInteger::getBytes>("bytes"),
 
-            ObjectWrap_t::InstanceMethod<&LargeInteger::neg>("neg"),
-            ObjectWrap_t::InstanceMethod<&LargeInteger::add>("add"),
-            ObjectWrap_t::InstanceMethod<&LargeInteger::sub>("sub"),
-            ObjectWrap_t::InstanceMethod<&LargeInteger::mul>("mul"),
-            ObjectWrap_t::InstanceMethod<&LargeInteger::div>("div"),
-            ObjectWrap_t::InstanceMethod<&LargeInteger::mod>("mod"),
-            ObjectWrap_t::InstanceMethod<&LargeInteger::band>("band"),
-            ObjectWrap_t::InstanceMethod<&LargeInteger::bor>("bor"),
-            ObjectWrap_t::InstanceMethod<&LargeInteger::xor_>("xor"),
-            ObjectWrap_t::InstanceMethod<&LargeInteger::not_>("not"),
-            ObjectWrap_t::InstanceMethod<&LargeInteger::shl>("shl"),
-            ObjectWrap_t::InstanceMethod<&LargeInteger::shr>("shr"),
-            ObjectWrap_t::InstanceMethod<&LargeInteger::eq>("eq"),
-            ObjectWrap_t::InstanceMethod<&LargeInteger::neq>("neq"),
-            ObjectWrap_t::InstanceMethod<&LargeInteger::lt>("lt"),
-            ObjectWrap_t::InstanceMethod<&LargeInteger::lte>("lte"),
-            ObjectWrap_t::InstanceMethod<&LargeInteger::gt>("gt"),
-            ObjectWrap_t::InstanceMethod<&LargeInteger::gte>("gte"),
-            ObjectWrap_t::InstanceMethod<&LargeInteger::bswap>("bswap"),
-            ObjectWrap_t::InstanceMethod<&LargeInteger::bceil>("bceil"),
-            ObjectWrap_t::InstanceMethod<&LargeInteger::bfloor>("bfloor"),
-            ObjectWrap_t::InstanceMethod<&LargeInteger::bwidth>("bwidth"),
-            ObjectWrap_t::InstanceMethod<&LargeInteger::rotl>("rotl"),
-            ObjectWrap_t::InstanceMethod<&LargeInteger::rotr>("rotr"),
-            ObjectWrap_t::InstanceMethod<&LargeInteger::countlZero>("countlZero"),
-            ObjectWrap_t::InstanceMethod<&LargeInteger::countlOne>("countlOne"),
-            ObjectWrap_t::InstanceMethod<&LargeInteger::countrZero>("countrZero"),
-            ObjectWrap_t::InstanceMethod<&LargeInteger::countrOne>("countrOne"),
-            ObjectWrap_t::InstanceMethod<&LargeInteger::popCount>("popCount")
+            InstanceMethod_<&LargeInteger::neg>("neg"),
+            InstanceMethod_<&LargeInteger::add>("add"),
+            InstanceMethod_<&LargeInteger::sub>("sub"),
+            InstanceMethod_<&LargeInteger::mul>("mul"),
+            InstanceMethod_<&LargeInteger::div>("div"),
+            InstanceMethod_<&LargeInteger::mod>("mod"),
+            InstanceMethod_<&LargeInteger::band>("band"),
+            InstanceMethod_<&LargeInteger::bor>("bor"),
+            InstanceMethod_<&LargeInteger::xor_>("xor"),
+            InstanceMethod_<&LargeInteger::not_>("not"),
+            InstanceMethod_<&LargeInteger::shl>("shl"),
+            InstanceMethod_<&LargeInteger::shr>("shr"),
+            InstanceMethod_<&LargeInteger::eq>("eq"),
+            InstanceMethod_<&LargeInteger::neq>("neq"),
+            InstanceMethod_<&LargeInteger::lt>("lt"),
+            InstanceMethod_<&LargeInteger::lte>("lte"),
+            InstanceMethod_<&LargeInteger::gt>("gt"),
+            InstanceMethod_<&LargeInteger::gte>("gte"),
+            InstanceMethod_<&LargeInteger::bswap>("bswap"),
+            InstanceMethod_<&LargeInteger::bceil>("bceil"),
+            InstanceMethod_<&LargeInteger::bfloor>("bfloor"),
+            InstanceMethod_<&LargeInteger::bwidth>("bwidth"),
+            InstanceMethod_<&LargeInteger::rotl>("rotl"),
+            InstanceMethod_<&LargeInteger::rotr>("rotr"),
+            InstanceMethod_<&LargeInteger::countlZero>("countlZero"),
+            InstanceMethod_<&LargeInteger::countlOne>("countlOne"),
+            InstanceMethod_<&LargeInteger::countrZero>("countrZero"),
+            InstanceMethod_<&LargeInteger::countrOne>("countrOne"),
+            InstanceMethod_<&LargeInteger::popCount>("popCount")
         });
+
+#undef InstanceAccessor_
+#undef InstanceMethod_
 
         constructor = Napi::Persistent(class_);
         constructor.SuppressDestruct();
