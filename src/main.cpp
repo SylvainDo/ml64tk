@@ -1,5 +1,6 @@
 #include "core/largeInteger.hpp"
 #include "core/opaquePointer.hpp"
+#include "gui/gui.hpp"
 #include "imgui/imgui.hpp"
 #include "appWindow.hpp"
 
@@ -57,6 +58,7 @@ Napi::Object initModule(Napi::Env env, Napi::Object exports) {
     core::UnsignedLargeInteger::initialize(env, exports);
     core::OpaquePointer::initialize(env, exports);
     exports.Set("ImGui", imgui::initialize(env, Napi::Object::New(env)));
+    exports.Set("Gui", gui::initialize(env, Napi::Object::New(env)));
     AppWindow::initialize(env, exports);
 
     return exports;

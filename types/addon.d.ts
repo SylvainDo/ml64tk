@@ -1397,6 +1397,78 @@ export module ImGui {
     function internalSetItemUsingMouseWheel(): void;
 }
 
+export module Gui {
+    type FileDialogFilters = (string | string[])[];
+
+    interface FileDialogOptions {
+        parent?: ImGui.Viewport;
+        title?: string;
+        currentFolder?: string;
+        filters?: FileDialogFilters;
+        okButtonLabel?: string;
+    }
+
+    interface FolderDialogOptions {
+        parent?: ImGui.Viewport;
+        title?: string;
+        currentFolder?: string;
+        okButtonLabel?: string;
+    }
+
+    interface FileDialogResult {
+        selectedFilter?: number;
+        filename?: string;
+    }
+
+    interface FileDialogResults {
+        selectedFilter?: number;
+        filenames?: string[];
+    }
+
+    type FolderDialogResult = string | undefined;
+    type FolderDialogResults = string[] | undefined;
+
+    function getOpenFileName(options?: FileDialogOptions): FileDialogResult;
+    function getOpenFileNames(options?: FileDialogOptions): FileDialogResults;
+    function getSaveFileName(options?: FileDialogOptions): FileDialogResult;
+    function getExistingDirectory(options?: FolderDialogOptions): FolderDialogResult;
+    function getExistingDirectories(options?: FolderDialogOptions): FolderDialogResults;
+
+    const enum MessageBoxButtons {
+        OK,
+        Cancel,
+        OKCancel,
+        YesNo,
+        Close
+    }
+
+    const enum MessageBoxIcon {
+        None,
+        Warning,
+        Error,
+        Information
+    }
+
+    const enum MessageBoxResponse {
+        OK,
+        Cancel,
+        Yes,
+        No,
+        Close
+    }
+
+    interface MessageBoxOptions {
+        parent?: ImGui.Viewport;
+        title?: string;
+        mainInstruction?: string;
+        content?: string;
+        buttons?: MessageBoxButtons;
+        icon?: MessageBoxIcon;
+    }
+
+    function showMessageBox(options?: MessageBoxOptions): MessageBoxResponse;
+}
+
 type AppCallbackName = 'init' | 'before-new-frame' | 'new-frame' | 'before-render' | 'render' | 'drop-file';
 type AppCallbackVoid = () => void;
 type AppCallbackDropFile = (filename: string, viewport: ImGui.Viewport) => void;

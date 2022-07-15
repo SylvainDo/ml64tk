@@ -15,6 +15,9 @@ set(SRC
 	"src/core/largeInteger.hpp"
 	"src/core/opaquePointer.cpp"
 	"src/core/opaquePointer.hpp"
+	"src/gui/dialogs.hpp"
+	"src/gui/gui.cpp"
+	"src/gui/gui.hpp"
 	"src/imgui/convert.hpp"
 	"src/imgui/drawList.cpp"
 	"src/imgui/drawList.hpp"
@@ -54,7 +57,10 @@ set(SRC
 	"src/main.cpp"
 	)
 if(WIN32)
-    set(PLATFORM_SRC "app.manifest")
+    set(PLATFORM_SRC
+		"src/gui/win32/dialogs.cpp"
+		"app.manifest"
+		)
 endif()
 
 find_package(fmt CONFIG REQUIRED)
