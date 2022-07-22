@@ -206,7 +206,6 @@ Napi::Value runFileDialog(const Napi::CallbackInfo& info, GtkFileChooserAction a
             return obj;
         }
     }
-    return info.Env().Undefined();
 }
 
 Napi::Value getOpenFileName(const Napi::CallbackInfo& info) {
