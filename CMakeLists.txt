@@ -7,6 +7,9 @@ setup_os_vars()
 include(importGlad)
 include(importImGui)
 include(importNode)
+if(UNIX)
+	include(importGtk)
+endif()
 
 set(SRC
 	"src/core/type/convert.hpp"
@@ -18,6 +21,7 @@ set(SRC
 	"src/gui/dialogs.hpp"
 	"src/gui/gui.cpp"
 	"src/gui/gui.hpp"
+	"src/gui/theme.hpp"
 	"src/imgui/convert.hpp"
 	"src/imgui/drawList.cpp"
 	"src/imgui/drawList.hpp"
@@ -61,6 +65,12 @@ if(WIN32)
 		"src/gui/win32/dialogs.cpp"
 		"app.manifest"
 		)
+elseif(UNIX)
+	set(PLATFORM_SRC
+		"src/gui/gtk/dialogs.cpp"
+		"src/gui/gtk/theme.cpp"
+		"src/gui/gtk/util.hpp"
+		)
 endif()
 
 find_package(fmt CONFIG REQUIRED)
@@ -77,5 +87,5 @@ configure_node_module(ml64fx)
 
 if(UNIX)
 	add_subdirectory(napi-loader)
-	target_link_libraries(ml64fx PRIVATE napi-loader)
+	target_link_libraries(ml64fx PRIVATE napi-loader gtk)
 endif()

@@ -1405,14 +1405,12 @@ export module Gui {
         title?: string;
         currentFolder?: string;
         filters?: FileDialogFilters;
-        okButtonLabel?: string;
     }
 
     interface FolderDialogOptions {
         parent?: ImGui.Viewport;
         title?: string;
         currentFolder?: string;
-        okButtonLabel?: string;
     }
 
     interface FileDialogResult {
@@ -1434,19 +1432,19 @@ export module Gui {
     function getExistingDirectory(options?: FolderDialogOptions): FolderDialogResult;
     function getExistingDirectories(options?: FolderDialogOptions): FolderDialogResults;
 
+    const enum MessageBoxType {
+        Other,
+        Warning,
+        Error,
+        Information
+    }
+
     const enum MessageBoxButtons {
         OK,
         Cancel,
         OKCancel,
         YesNo,
         Close
-    }
-
-    const enum MessageBoxIcon {
-        None,
-        Warning,
-        Error,
-        Information
     }
 
     const enum MessageBoxResponse {
@@ -1460,13 +1458,21 @@ export module Gui {
     interface MessageBoxOptions {
         parent?: ImGui.Viewport;
         title?: string;
-        mainInstruction?: string;
+        subtitle?: string;
         content?: string;
+        type?: MessageBoxType;
         buttons?: MessageBoxButtons;
-        icon?: MessageBoxIcon;
     }
 
     function showMessageBox(options?: MessageBoxOptions): MessageBoxResponse;
+
+    const enum ColorScheme {
+        PreferLight,
+        PreferDark
+    }
+
+    function getColorScheme(): ColorScheme;
+    function getAccentColor(): Color;
 }
 
 type AppCallbackName = 'init' | 'before-new-frame' | 'new-frame' | 'before-render' | 'render' | 'drop-file';

@@ -26,6 +26,9 @@ static struct AutoDpiAware {
 
 extern "C" __declspec(dllexport) DWORD NvOptimusEnablement = 0x00000001;
 extern "C" __declspec(dllexport) DWORD AmdPowerXpressRequestHighPerformance = 0x00000001;
+#else
+#include <gtk/gtk.h>
+namespace gui::theme { void initialize(Napi::Env env); }
 #endif
 
 void initialize(Napi::Env env) {
@@ -41,6 +44,13 @@ void initialize(Napi::Env env) {
     if (TTF_Init() != 0)
         throw Napi::Error::New(env, fmt::format("failed to initialize sdl2 ttf: {}", TTF_GetError()));
     SDL_DisableScreenSaver();
+#ifndef _WIN32
+    if (setenv("GSK_RENDERER", "cairo", true) != 0)
+        throw Napi::Error::New(env, "failed to override GSK_RENDERER environment variable");
+    if (!gtk_init_check())
+        throw Napi::Error::New(env, "failed to initialize gtk");
+    gui::theme::initialize(env);
+#endif
 }
 
 void deinitialize() {
