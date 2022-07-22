@@ -33,7 +33,7 @@ namespace gui::theme { void initialize(Napi::Env env); }
 
 void initialize(Napi::Env env) {
     SDL_SetMainReady();
-    SDL_SetHint(SDL_HINT_APP_NAME, "ml64fx");
+    SDL_SetHint(SDL_HINT_APP_NAME, "ml64tk");
     SDL_SetHint(SDL_HINT_JOYSTICK_ALLOW_BACKGROUND_EVENTS, "1");
     SDL_SetHint(SDL_HINT_MOUSE_FOCUS_CLICKTHROUGH, "1");
     SDL_SetHint(SDL_HINT_VIDEO_MINIMIZE_ON_FOCUS_LOSS, "0");
@@ -74,4 +74,4 @@ Napi::Object initModule(Napi::Env env, Napi::Object exports) {
     return exports;
 }
 
-NODE_API_MODULE(ml64fxModule, initModule)
+NODE_API_MODULE(ml64tkModule, initModule)

@@ -9,6 +9,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "ml64fx": "file:.."
+    "ml64tk": "file:.."
   }
 }
