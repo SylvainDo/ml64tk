@@ -3,11 +3,13 @@ project(ml64tk)
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 include(initProject)
-setup_os_vars()
+setup_project_vars()
 include(importGlad)
 include(importImGui)
 include(importNode)
-if(UNIX)
+if(WIN32)
+	include(importWinrtTheming)
+else()
 	include(importGtk)
 endif()
 
@@ -63,6 +65,7 @@ set(SRC
 if(WIN32)
     set(PLATFORM_SRC
 		"src/gui/win32/dialogs.cpp"
+		"src/gui/win32/theme.cpp"
 		"app.manifest"
 		)
 elseif(UNIX)
@@ -85,7 +88,10 @@ target_include_directories(ml64tk PRIVATE "${CMAKE_SOURCE_DIR}/src")
 target_link_libraries(ml64tk PRIVATE fmt::fmt SDL2::SDL2 OpenGL::GL glad freetype imgui SDL2::SDL2_image SDL2::SDL2_ttf)
 configure_node_module(ml64tk)
 
-if(UNIX)
+if (WIN32)
+	add_dependencies(ml64tk winrt-theming)
+	target_link_libraries(ml64tk PRIVATE winrt-theming::lib)
+else()
 	add_subdirectory(napi-loader)
 	target_link_libraries(ml64tk PRIVATE napi-loader gtk)
 endif()

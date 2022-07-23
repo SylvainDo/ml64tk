@@ -5,6 +5,7 @@
 namespace gui {
 
 #ifdef _WIN32
+namespace theme { Napi::Value useImmersiveDarkMode(const Napi::CallbackInfo& info); }
 #else
 namespace theme { Napi::Value getGtkTheme(const Napi::CallbackInfo& info); }
 #endif
@@ -23,6 +24,7 @@ Napi::Object initialize(Napi::Env env, Napi::Object exports) {
     exports.Set("getAccentColor", Napi::Function::New(env, getAccentColor));
 
 #ifdef _WIN32
+    exports.Set("useImmersiveDarkMode", Napi::Function::New(env, useImmersiveDarkMode));
 #else
     exports.Set("getGtkTheme", Napi::Function::New(env, getGtkTheme));
 #endif

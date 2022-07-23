@@ -13,14 +13,10 @@
 #include <shellscalingapi.h>
 #pragma comment(lib, "shcore.lib")
 
-void setDpiAware() {
-    if (SetProcessDpiAwareness(PROCESS_PER_MONITOR_DPI_AWARE) != S_OK)
-        SetProcessDpiAwareness(PROCESS_SYSTEM_DPI_AWARE);
-}
-
 static struct AutoDpiAware {
     AutoDpiAware() {
-        setDpiAware();
+        if (SetProcessDpiAwareness(PROCESS_PER_MONITOR_DPI_AWARE) != S_OK)
+            SetProcessDpiAwareness(PROCESS_SYSTEM_DPI_AWARE);
     }
 } autoDpiAware;
 
@@ -31,7 +27,7 @@ extern "C" __declspec(dllexport) DWORD AmdPowerXpressRequestHighPerformance = 0x
 namespace gui::theme { void initialize(Napi::Env env); }
 #endif
 
-void initialize(Napi::Env env) {
+static void initialize(Napi::Env env) {
     SDL_SetMainReady();
     SDL_SetHint(SDL_HINT_APP_NAME, "ml64tk");
     SDL_SetHint(SDL_HINT_JOYSTICK_ALLOW_BACKGROUND_EVENTS, "1");
@@ -53,7 +49,7 @@ void initialize(Napi::Env env) {
 #endif
 }
 
-void deinitialize() {
+static void deinitialize() {
     SDL_EnableScreenSaver();
     TTF_Quit();
     IMG_Quit();

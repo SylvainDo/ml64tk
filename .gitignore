@@ -10,4 +10,10 @@
 /test/assets
 /test/bin
 /test/imgui.ini
+/winrt-theming/.vs
+/winrt-theming/Debug
+/winrt-theming/packages
+/winrt-theming/Release
+/winrt-theming/x64
+/winrt-theming/*.user
 node_modules

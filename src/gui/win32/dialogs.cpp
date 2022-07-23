@@ -1,36 +1,49 @@
 #include "core/type/convert.hpp"
+#include "gui/dialogs.hpp"
 #include "gui/gui.hpp"
 #include "imgui/viewport.hpp"
 
 #include <optional>
+#include <string>
 #include <vector>
 
+#include <fmt/format.h>
 #include <imgui.h>
+#include <SDL_video.h>
 
 #include <shlobj_core.h>
 #pragma comment(lib, "comctl32")
 
 using namespace core::type::convert;
+using namespace imgui;
 
 namespace gui::dialogs {
 
-#define u16str2wstr(x) reinterpret_cast<LPCWSTR>(x.c_str())
+static std::wstring s2ws(const std::string& str) {
+    if (str.empty()) return {};
+    int size = MultiByteToWideChar(CP_UTF8, 0, str.c_str(), static_cast<int>(str.size()), nullptr, 0);
+    if (size == 0) return {};
+    std::wstring wstr(size, '\0');
+    size = MultiByteToWideChar(CP_UTF8, 0, str.c_str(), static_cast<int>(str.size()), wstr.data(), static_cast<int>(wstr.size()));
+    if (size == 0) return {};
+    return wstr;
+}
 
-std::u16string makeFilterString(const Napi::Array& val) {
-    std::u16string str;
+static std::string makeFilterString(const Napi::Array& val) {
+    std::string str;
     for (std::size_t i{}, length = val.Length(); i < length; ++i)
-        str += std::u16string{ u"*." } + asStrUtf16(val.Get(i)) + u";";
+        str += fmt::format("*.{};", asStrUtf8(val.Get(i)));
     str.pop_back();
     return str;
 }
 
-std::vector<COMDLG_FILTERSPEC> makeFilterSpecs(std::vector<std::u16string>& stringsCache, const Napi::Array& val) {
-    std::vector<COMDLG_FILTERSPEC> filterSpecs;
-    for (std::size_t i{}, length = val.Length(); i < length;) {
-        stringsCache.push_back(asStrUtf16(val.Get(i++)));
-        stringsCache.push_back(makeFilterString(valueAsArray(val.Get(i++))));
-        filterSpecs.push_back({ u16str2wstr(stringsCache[stringsCache.size() - 2]),
-            u16str2wstr(stringsCache[stringsCache.size() - 1]) });
+static std::vector<COMDLG_FILTERSPEC> makeFilterSpecs(std::vector<std::wstring>& stringsCache, const Napi::Array& val) {
+    std::vector<COMDLG_FILTERSPEC> filterSpecs(val.Length() / 2);
+    stringsCache.resize(val.Length());
+    for (std::size_t i{}, j{}, length = val.Length(); i < length; ++j) {
+        stringsCache[i] = s2ws(asStrUtf8(val.Get(i))); ++i;
+        stringsCache[i] = s2ws(makeFilterString(valueAsArray(val.Get(i)))); ++i;
+        filterSpecs[j] = { stringsCache[i - 2].c_str(), stringsCache[i - 1].c_str() };
     }
     return filterSpecs;
 }
@@ -73,31 +86,29 @@ public:
     }
 
     void setParent(const Napi::Value& val) {
-        m_parent = static_cast<HWND>(imgui::Viewport::get(val)->PlatformHandleRaw);
+        m_parent = static_cast<HWND>(Viewport::get(val)->PlatformHandleRaw);
     }
 
     void setTitle(const Napi::Value& val) {
-        m_diag->SetTitle(u16str2wstr(asStrUtf16(val)));
+        m_diag->SetTitle(s2ws(asStrUtf8(val)).c_str());
     }
 
     void setFolder(const Napi::Value& val) {
         std::unique_ptr<ITEMIDLIST, decltype(&ilFree)> idl{ nullptr, ilFree };
-        auto pidl = idl.get();
-        SHParseDisplayName(u16str2wstr(asStrUtf16(val)), nullptr, &pidl, SFGAO_FOLDER, nullptr);
+        ITEMIDLIST* pidl{};
+        SHParseDisplayName(s2ws(asStrUtf8(val)).c_str(), nullptr, &pidl, SFGAO_FOLDER, nullptr);
+        idl.reset(pidl);
         std::unique_ptr<IShellItem, decltype(&shellItemRelease)> si{ nullptr, shellItemRelease };
-        auto psi = si.get();
+        IShellItem* psi{};
         SHCreateShellItem(nullptr, nullptr, pidl, &psi);
+        si.reset(psi);
         m_diag->SetFolder(psi);
     }
 
     void setFileTypes(const Napi::Value& val) {
-        std::vector<std::u16string> stringsCache;
+        std::vector<std::wstring> stringsCache;
         const auto filterSpecs = makeFilterSpecs(stringsCache, valueAsArray(val));
         m_diag->SetFileTypes(filterSpecs.size(), filterSpecs.data());
-    }
-
-    void setOkButtonLabel(const Napi::Value& val) {
-        m_diag->SetOkButtonLabel(u16str2wstr(asStrUtf16(val)));
     }
 
     void show() {
@@ -133,33 +144,42 @@ private:
 
     Napi::Value getFileTypeIndex() {
         UINT fileTypeIndex;
-        return FAILED(m_diag->GetFileTypeIndex(&fileTypeIndex)) || fileTypeIndex == 0 ? m_env.Undefined() : fromU32(m_env, fileTypeIndex - 1);
+        return FAILED(m_diag->GetFileTypeIndex(&fileTypeIndex)) || fileTypeIndex == 0 ?
+            m_env.Undefined() : fromU32(m_env, fileTypeIndex - 1);
     }
 
     Napi::Value getShellItemFileName(IShellItem* psi) {
         std::unique_ptr<wchar_t, decltype(&filePathFree)> filePath{ nullptr, filePathFree };
-        auto pFilePath = filePath.get();
+        wchar_t* pFilePath{};
         psi->GetDisplayName(SIGDN_FILESYSPATH, &pFilePath);
+        if (!pFilePath) psi->GetDisplayName(SIGDN_PARENTRELATIVEFORADDRESSBAR, &pFilePath);
+        filePath.reset(pFilePath);
         return fromStrUtf16(m_env, reinterpret_cast<const char16_t*>(pFilePath));
     }
 
     Napi::Value getResultFileName() {
         std::unique_ptr<IShellItem, decltype(&shellItemRelease)> si{ nullptr, shellItemRelease };
-        auto psi = si.get();
-        return SUCCEEDED(m_diag->GetResult(&psi)) ? getShellItemFileName(psi) : m_env.Undefined();
+        IShellItem* psi{};
+        if (SUCCEEDED(m_diag->GetResult(&psi))) {
+            si.reset(psi);
+            return getShellItemFileName(psi);
+        }
+        return m_env.Undefined();
     }
 
     Napi::Value getResultFileNames() {
         std::unique_ptr<IShellItemArray, decltype(&shellItemArrayRelease)> sia{ nullptr, shellItemArrayRelease };
-        auto psia = sia.get();
+        IShellItemArray* psia{};
         if (SUCCEEDED(m_diag->GetResults(&psia))) {
+            sia.reset(psia);
             auto val = Napi::Array::New(m_env);
             DWORD numItems;
             psia->GetCount(&numItems);
             for (DWORD i{}; i < numItems; ++i) {
                 std::unique_ptr<IShellItem, decltype(&shellItemRelease)> si{ nullptr, shellItemRelease };
-                auto psi = si.get();
+                IShellItem* psi{};
                 psia->GetItemAt(i, &psi);
+                si.reset(psi);
                 val.Set(i, getShellItemFileName(psi));
             }
             return val;
@@ -182,7 +202,6 @@ Napi::Value execFileDialog(const Napi::CallbackInfo& info, const CLSID& clsid, c
         if (const auto v = obj.Get("title"); !v.IsUndefined()) diag.setTitle(v);
         if (const auto v = obj.Get("currentFolder"); !v.IsUndefined()) diag.setFolder(v);
         if (const auto v = obj.Get("filters"); !v.IsUndefined()) diag.setFileTypes(v);
-        if (const auto v = obj.Get("okButtonLabel"); !v.IsUndefined()) diag.setOkButtonLabel(v);
     }
     diag.show();
 
@@ -212,62 +231,63 @@ Napi::Value getExistingDirectories(const Napi::CallbackInfo& info) {
     return execFileDialog<IFileOpenDialog, true, true>(info, CLSID_FileOpenDialog, IID_IFileOpenDialog);
 }
 
-TASKDIALOG_COMMON_BUTTON_FLAGS convertButtons(int buttons) {
+static LPCWSTR convertType(MessageBoxType type) {
+    switch (type) {
+    default: case MessageBoxType::Other: return nullptr;
+    case MessageBoxType::Warning: return TD_WARNING_ICON;
+    case MessageBoxType::Error: return TD_ERROR_ICON;
+    case MessageBoxType::Information: return TD_INFORMATION_ICON;
+    }
+}
+
+static TASKDIALOG_COMMON_BUTTON_FLAGS convertButtons(MessageBoxButtons buttons) {
     switch (buttons) {
-    default: case 0: return TDCBF_OK_BUTTON;
-    case 1: return TDCBF_CANCEL_BUTTON;
-    case 2: return TDCBF_OK_BUTTON | TDCBF_CANCEL_BUTTON;
-    case 3: return TDCBF_YES_BUTTON | TDCBF_NO_BUTTON;
-    case 4: return TDCBF_CLOSE_BUTTON;
+    default: case MessageBoxButtons::OK: return TDCBF_OK_BUTTON;
+    case MessageBoxButtons::Cancel: return TDCBF_CANCEL_BUTTON;
+    case MessageBoxButtons::OKCancel: return TDCBF_OK_BUTTON | TDCBF_CANCEL_BUTTON;
+    case MessageBoxButtons::YesNo: return TDCBF_YES_BUTTON | TDCBF_NO_BUTTON;
+    case MessageBoxButtons::Close: return TDCBF_CLOSE_BUTTON;
     }
 }
 
-LPCWSTR convertIcon(int icon) {
-    switch (icon) {
-    default: case 0: return 0;
-    case 1: return TD_WARNING_ICON;
-    case 2: return TD_ERROR_ICON;
-    case 3: return TD_INFORMATION_ICON;
-    }
-}
-
-int convertResult(int result) {
-    switch (result) {
-    default: case 0: case IDOK: return 0;
-    case IDCANCEL: return 1;
-    case IDYES: return 2;
-    case IDNO: return 3;
-    case IDCLOSE: return 4;
+static MessageBoxResponse convertResponse(int response) {
+    switch (response) {
+    default: case 0: case IDOK: return MessageBoxResponse::OK;
+    case IDCANCEL: return MessageBoxResponse::Cancel;
+    case IDYES: return MessageBoxResponse::Yes;
+    case IDNO: return MessageBoxResponse::No;
+    case IDCLOSE: return MessageBoxResponse::Close;
     }
 }
 
 Napi::Value showMessageBox(const Napi::CallbackInfo& info) {
-    std::optional<HWND> parent;
-    std::optional<std::u16string> title, mainInstruction, content;
+    ImGuiViewport* parent{};
+    std::optional<std::wstring> title, subtitle, content;
+    std::optional<PCWSTR> type;
     std::optional<TASKDIALOG_COMMON_BUTTON_FLAGS> buttons;
-    std::optional<PCWSTR> icon;
 
     if (!info[0].IsUndefined()) {
         const auto obj = valueAsObject(info[0]);
-        if (const auto v = obj.Get("parent"); !v.IsUndefined()) parent = static_cast<HWND>(imgui::Viewport::get(v)->PlatformHandleRaw);
-        if (const auto v = obj.Get("title"); !v.IsUndefined()) title = asStrUtf16(v);
-        if (const auto v = obj.Get("mainInstruction"); !v.IsUndefined()) mainInstruction = asStrUtf16(v);
-        if (const auto v = obj.Get("content"); !v.IsUndefined()) content = asStrUtf16(v);
-        if (const auto v = obj.Get("buttons"); !v.IsUndefined()) buttons = convertButtons(asS32(v));
-        if (const auto v = obj.Get("icon"); !v.IsUndefined()) icon = convertIcon(asS32(v));
+        if (const auto v = obj.Get("parent"); !v.IsUndefined()) parent = Viewport::get(v);
+        if (const auto v = obj.Get("title"); !v.IsUndefined()) title = s2ws(asStrUtf8(v));
+        if (const auto v = obj.Get("subtitle"); !v.IsUndefined()) subtitle = s2ws(asStrUtf8(v));
+        if (const auto v = obj.Get("content"); !v.IsUndefined()) content = s2ws(asStrUtf8(v));
+        if (const auto v = obj.Get("type"); !v.IsUndefined()) type = convertType(static_cast<MessageBoxType>(asS32(v)));
+        if (const auto v = obj.Get("buttons"); !v.IsUndefined()) buttons = convertButtons(static_cast<MessageBoxButtons>(asS32(v)));
     }
 
-    int result;
+    int response;
     TaskDialog(
-        parent.has_value() ? parent.value() : nullptr,
+        parent ? static_cast<HWND>(parent->PlatformHandleRaw) : nullptr,
         GetModuleHandle(nullptr),
-        title.has_value() ? u16str2wstr(title.value()) : nullptr,
-        mainInstruction.has_value() ? u16str2wstr(mainInstruction.value()) : nullptr,
-        content.has_value() ? u16str2wstr(content.value()) : nullptr,
+        title.has_value() ? title.value().c_str() :
+            (parent ? s2ws(SDL_GetWindowTitle(static_cast<SDL_Window*>(parent->PlatformHandle))).c_str() : nullptr),
+        subtitle.has_value() ? subtitle.value().c_str() : nullptr,
+        content.has_value() ? content.value().c_str() : nullptr,
         buttons.has_value() ? buttons.value() : 0,
-        icon.has_value() ? icon.value() : 0,
-        &result);
-    return fromS32(info.Env(), convertResult(result));
+        type.has_value() ? type.value() : 0,
+        &response);
+    return fromS32(info.Env(), static_cast<int>(convertResponse(response)));
 }
 
 }
