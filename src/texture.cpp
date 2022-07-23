@@ -23,6 +23,7 @@ Napi::Object Texture::initialize(Napi::Env env, Napi::Object exports) {
         InstanceMethod<&Texture::ref>("ref"),
         InstanceMethod<&Texture::unref>("unref"),
 
+        InstanceMethod<&Texture::equals>("equals"),
         InstanceMethod<&Texture::loadFromFile>("loadFromFile"),
         InstanceMethod<&Texture::loadFromMemory>("loadFromMemory"),
         InstanceMethod<&Texture::loadFromRGBA32>("loadFromRGBA32"),
@@ -69,6 +70,10 @@ Napi::Value Texture::ref(const Napi::CallbackInfo& info) {
 
 Napi::Value Texture::unref(const Napi::CallbackInfo& info) {
     return fromU32(info.Env(), Unref());
+}
+
+Napi::Value Texture::equals(const Napi::CallbackInfo& info) {
+    return fromBool(info.Env(), this == Texture::unwrap(info[0]));
 }
 
 Napi::Value Texture::loadFromFile(const Napi::CallbackInfo& info) {

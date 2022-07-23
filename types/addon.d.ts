@@ -1497,6 +1497,7 @@ export var AppWindow: {
 };
 
 interface Texture {
+    equals(other: Texture): boolean;
     loadFromFile(filename: string): void;
     loadFromMemory(data: Uint8Array): void;
     loadFromRGBA32(width: number, height: number, data: Uint8Array): void;

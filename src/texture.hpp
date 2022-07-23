@@ -41,6 +41,7 @@ private:
     Napi::Value ref(const Napi::CallbackInfo& info);
     Napi::Value unref(const Napi::CallbackInfo& info);
 
+    Napi::Value equals(const Napi::CallbackInfo& info);
     Napi::Value loadFromFile(const Napi::CallbackInfo& info);
     Napi::Value loadFromMemory(const Napi::CallbackInfo& info);
     Napi::Value loadFromRGBA32(const Napi::CallbackInfo& info);
