@@ -1495,3 +1495,15 @@ interface AppWindow {
 export var AppWindow: {
     new(): AppWindow;
 };
+
+interface Texture {
+    loadFromFile(filename: string): void;
+    loadFromMemory(data: Uint8Array): void;
+    loadFromRGBA32(width: number, height: number, data: Uint8Array): void;
+    id: OpaquePointer;
+    size: Vec2;
+}
+
+export var Texture: {
+    new(): Texture;
+};

@@ -61,6 +61,8 @@ set(SRC
 	"src/appWindow.cpp"
 	"src/appWindow.hpp"
 	"src/main.cpp"
+	"src/texture.cpp"
+	"src/texture.hpp"
 	)
 if(WIN32)
     set(PLATFORM_SRC
