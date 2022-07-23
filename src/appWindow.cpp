@@ -127,9 +127,9 @@ void AppWindow::doStep(Napi::Env env) {
             m_done = true;
         }
         else if (e.type == SDL_DROPFILE) {
-            struct finalizer_ { char* v; finalizer_(char* v) : v{ v } {} ~finalizer_() { SDL_free(v); } } finalizer{ e.drop.file };
+            const std::unique_ptr<char, decltype(&SDL_free)> file{ e.drop.file, SDL_free };
             call(Callback::DropFile, {
-                fromStrUtf8(env, e.drop.file),
+                fromStrUtf8(env, file.get()),
                 imgui::Viewport::create(env, ImGui::FindViewportByPlatformHandle(SDL_GetWindowFromID(e.drop.windowID)))
             });
         }
@@ -207,6 +207,7 @@ Napi::Value AppWindow::on(const Napi::CallbackInfo& info) {
     else if (name == "before-render") callback = &m_callbacks[Callback::BeforeRender];
     else if (name == "render") callback = &m_callbacks[Callback::Render];
     else if (name == "drop-file") callback = &m_callbacks[Callback::DropFile];
+    else throw Napi::Error::New(info.Env(), "invalid callback name");
     *callback = std::make_unique<Napi::FunctionReference>();
     if (!info[1].IsUndefined())
         *callback->get() = Napi::Persistent(valueAsFunction(info[1]));
