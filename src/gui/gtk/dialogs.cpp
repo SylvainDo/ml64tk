@@ -296,7 +296,7 @@ Napi::Value showMessageBox(const Napi::CallbackInfo& info) {
             type.has_value() ? type.value() : GTK_MESSAGE_OTHER,
             buttons.has_value() ? buttons.value() : GTK_BUTTONS_OK,
             "%s",
-            title.has_value() ? title.value().c_str() : (parent? SDL_GetWindowTitle(parent) : "")));
+            title.has_value() ? title.value().c_str() : (parent ? SDL_GetWindowTitle(parent) : "")));
         gtk_message_dialog_format_secondary_text(
             GTK_MESSAGE_DIALOG(dialog.get()),
             "%s",
