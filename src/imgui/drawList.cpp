@@ -3,11 +3,15 @@
 #include "imgui/convert.hpp"
 #include "imgui/drawList.hpp"
 #include "imgui/font.hpp"
+#include "texture.hpp"
 
+#include <cmath>
+#include <array>
 #include <optional>
 
 #include <fmt/format.h>
 #include <imgui.h>
+#include <SDL_render.h>
 
 using namespace core;
 using namespace core::type::convert;
@@ -67,7 +71,9 @@ Napi::Object DrawList::initialize(Napi::Env env, Napi::Object exports) {
         InstanceMethod<&DrawList::pathBezierCubicCurveTo>("pathBezierCubicCurveTo"),
         InstanceMethod<&DrawList::pathBezierQuadraticCurveTo>("pathBezierQuadraticCurveTo"),
         InstanceMethod<&DrawList::pathRect>("pathRect"),
-        InstanceMethod<&DrawList::addDrawCmd>("addDrawCmd")
+        InstanceMethod<&DrawList::addDrawCmd>("addDrawCmd"),
+        InstanceMethod<&DrawList::addSprite>("addSprite"),
+        InstanceMethod<&DrawList::addSpriteEx>("addSpriteEx")
     });
 
     m_ctor = Napi::Persistent(class_);
@@ -456,6 +462,102 @@ Napi::Value DrawList::pathRect(const Napi::CallbackInfo& info) {
 
 Napi::Value DrawList::addDrawCmd(const Napi::CallbackInfo& info) {
     m_val->AddDrawCmd();
+    return info.Env().Undefined();
+}
+
+Napi::Value DrawList::addSprite(const Napi::CallbackInfo& info) {
+    const auto texture = Texture::unwrap(info[0]);
+    const auto pos = m_origin + asVec2(info[1]);
+    m_val->AddImage(texture->getIdPtr(), pos, pos + ImVec2(texture->getWidth(), texture->getHeight()));
+    return info.Env().Undefined();
+}
+
+static std::array<ImVec2, 4> buildUVs(int textureWidth, int textureHeight, const ImVec4& src, SDL_RendererFlip flip) {
+    std::array<ImVec2, 4> uv{
+        ImVec2{ src.x / textureWidth, src.y / textureHeight },
+        { (src.x + src.z) / textureWidth, src.y / textureHeight },
+        { (src.x + src.z) / textureWidth, (src.y + src.w) / textureHeight },
+        { src.x / textureWidth, (src.y + src.w) / textureHeight }
+    };
+    if ((flip & SDL_FLIP_HORIZONTAL) == SDL_FLIP_HORIZONTAL) {
+        std::swap(uv[0], uv[1]);
+        std::swap(uv[2], uv[3]);
+    }
+    if ((flip & SDL_FLIP_VERTICAL) == SDL_FLIP_VERTICAL) {
+        std::swap(uv[0], uv[3]);
+        std::swap(uv[1], uv[2]);
+    }
+    return uv;
+}
+
+inline ImVec2 rotateVec2(ImVec2 v, float cos_a, float sin_a) {
+    return { v.x * cos_a - v.y * sin_a, v.x * sin_a + v.y * cos_a };
+}
+
+inline ImVec2 truncVec2(ImVec2 v) {
+    return { std::trunc(v.x), std::trunc(v.y) };
+}
+
+Napi::Value DrawList::addSpriteEx(const Napi::CallbackInfo& info) {
+    const auto texture = Texture::unwrap(info[0]);
+    ImVec4 src(0.0f, 0.0f, texture->getWidth(), texture->getHeight());
+    auto dst = src;
+    ImColor tint{ IM_COL32_WHITE};
+    auto flip = SDL_FLIP_NONE;
+    float angle = 0.0f;
+    ImVec2 offset{}, scale{ 1.0f, 1.0f };
+    bool truncVtx{};
+    std::array<ImVec2, 4> verts;
+
+    if (!info[1].IsUndefined()) {
+        const auto obj = valueAsObject(info[1]);
+        if (const auto v = obj.Get("src"); !v.IsUndefined()) src = asVec4(v);
+        if (const auto v = obj.Get("dst"); !v.IsUndefined()) dst = asVec4(v);
+        if (const auto v = obj.Get("tint"); !v.IsUndefined()) tint = asColor(v);
+        if (const auto v = obj.Get("flip"); !v.IsUndefined()) flip = static_cast<SDL_RendererFlip>(asS32(v));
+        if (const auto v = obj.Get("angle"); !v.IsUndefined()) angle = asF32(v);
+        if (const auto v = obj.Get("offset"); !v.IsUndefined()) offset = asVec2(v);
+        if (const auto v = obj.Get("scale"); !v.IsUndefined()) scale = asVec2(v);
+        if (const auto v = obj.Get("truncVtx"); !v.IsUndefined()) truncVtx = asBool(v);
+
+        if (obj.Get("dst").IsUndefined() && !obj.Get("src").IsUndefined()) {
+            dst.z = src.z;
+            dst.w = src.w;
+        }
+    }
+
+    dst.z *= scale.x;
+    dst.w *= scale.y;
+
+    if (angle > -0.0001f && angle < 0.0001f) {
+        const auto dstX = m_origin.x + dst.x;
+        const auto dstY = m_origin.y + dst.y;
+        verts[0] = offset + ImVec2{ dstX, dstY };
+        verts[1] = offset + ImVec2{ dstX + dst.z, dstY };
+        verts[2] = offset + ImVec2{ dstX + dst.z, dstY + dst.w };
+        verts[3] = offset + ImVec2{ dstX, dstY + dst.w };
+    }
+    else {
+        const auto rcos = std::cosf(angle * 0.0174533);
+        const auto rsin = std::sinf(angle * 0.0174533);
+        const auto pos = offset + m_origin + ImVec2{ dst.z / 2, dst.w / 2 };
+        verts[0] = pos + rotateVec2({ -dst.z * 0.5f, -dst.w * 0.5f }, rcos, rsin);
+        verts[1] = pos + rotateVec2({ dst.z * 0.5f, -dst.w * 0.5f }, rcos, rsin);
+        verts[2] = pos + rotateVec2({ dst.z * 0.5f, dst.w * 0.5f }, rcos, rsin);
+        verts[3] = pos + rotateVec2({ -dst.z * 0.5f, dst.w * 0.5f }, rcos, rsin);
+    }
+
+    if (truncVtx) {
+        for (auto& vert : verts)
+            vert = truncVec2(vert);
+    }
+
+    const auto uv = buildUVs(texture->getWidth(), texture->getHeight(), src, flip);
+    m_val->AddImageQuad(texture->getIdPtr(),
+        verts[0], verts[1], verts[2], verts[3],
+        uv[0], uv[1], uv[2], uv[3],
+        ImGui::GetColorU32(tint.Value));
+
     return info.Env().Undefined();
 }
 

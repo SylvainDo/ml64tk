@@ -18,6 +18,8 @@ public:
         return m_id;
     }
 
+    void* getIdPtr() const;
+
     int getWidth() const {
         return m_width;
     }

@@ -48,6 +48,12 @@ Texture::Texture(const Napi::CallbackInfo& info) : Napi::ObjectWrap<Texture>{ in
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
+void* Texture::getIdPtr() const {
+    void* ptr;
+    std::memcpy(&ptr, &m_id, sizeof m_id);
+    return ptr;
+}
+
 void Texture::load(int width, int height, void* pixels) {
     glBindTexture(GL_TEXTURE_2D, m_id);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
@@ -102,9 +108,7 @@ Napi::Value Texture::loadFromRGBA32(const Napi::CallbackInfo& info) {
 }
 
 Napi::Value Texture::getId(const Napi::CallbackInfo& info) {
-    void* ptr;
-    std::memcpy(&ptr, &m_id, sizeof m_id);
-    return OpaquePointer::create(info.Env(), ptr);
+    return OpaquePointer::create(info.Env(), getIdPtr());
 }
 
 Napi::Value Texture::getSize(const Napi::CallbackInfo& info) {

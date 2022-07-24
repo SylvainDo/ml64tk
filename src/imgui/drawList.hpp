@@ -86,6 +86,8 @@ private:
     Napi::Value pathBezierQuadraticCurveTo(const Napi::CallbackInfo& info);
     Napi::Value pathRect(const Napi::CallbackInfo& info);
     Napi::Value addDrawCmd(const Napi::CallbackInfo& info);
+    Napi::Value addSprite(const Napi::CallbackInfo& info);
+    Napi::Value addSpriteEx(const Napi::CallbackInfo& info);
 };
 
 }

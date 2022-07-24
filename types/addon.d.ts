@@ -908,6 +908,23 @@ export module ImGui {
         AllowVtxOffset = 1 << 3
     }
 
+    const enum DrawFlipFlags {
+        None = 0x00000000,
+        Horizontal = 0x00000001,
+        Vertical = 0x00000002
+    }
+
+    interface DrawSpriteOptions {
+        src?: Vec4;
+        dst?: Vec4;
+        tint?: Color;
+        flip?: DrawFlipFlags;
+        angle?: number;
+        offset?: Vec2;
+        scale?: Vec2;
+        truncVtx?: boolean;
+    }
+
     interface DrawList {
         equals(other: DrawList): boolean;
         flags: DrawListFlags;
@@ -950,6 +967,8 @@ export module ImGui {
         pathBezierQuadraticCurveTo(p2: Vec2, p3: Vec2, numSegments?: number): void;
         pathRect(rectMin: Vec2, rectMax: Vec2, rounding?: number, flags?: DrawFlags): void;
         addDrawCmd(): void;
+        addSprite(texture: Texture, pos: Vec2): void;
+        addSpriteEx(texture: Texture, options?: DrawSpriteOptions): void;
     }
 
     const enum FreeTypeBuilderFlags {
