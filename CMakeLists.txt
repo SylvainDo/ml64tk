@@ -31,6 +31,8 @@ set(SRC
 	"src/core/largeInteger.hpp"
 	"src/core/opaquePointer.cpp"
 	"src/core/opaquePointer.hpp"
+	"src/gfx/font.cpp"
+	"src/gfx/font.hpp"
 	"src/gfx/gfx.cpp"
 	"src/gfx/gfx.hpp"
 	"src/gfx/texture.cpp"

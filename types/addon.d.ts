@@ -1587,6 +1587,20 @@ export module Gfx {
     export var Texture: {
         new(): Texture;
     };
+
+    interface Font {
+        equals(other: Font): boolean;
+        loadFromFile(filename: string, ptSize: number): void;
+        loadFromMemory(data: Uint8Array, ptSize: number): void;
+        fillColor: Color;
+        outlineColor: Color;
+        outlineThickness: number;
+        renderText(text: string): Texture;
+    }
+
+    export var Font: {
+        new(): Font;
+    };
 }
 
 type AppCallbackName = 'init' | 'before-new-frame' | 'new-frame' | 'before-render' | 'render' | 'drop-file';

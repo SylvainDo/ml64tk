@@ -7,6 +7,7 @@ namespace gfx {
 class Texture final : public Napi::ObjectWrap<Texture> {
 public:
     static Napi::Object initialize(Napi::Env env, Napi::Object exports);
+    static Napi::Object create(Napi::Env env, int width, int height, void* pixels);
 
     static Texture* unwrap(const Napi::Object& obj) {
         return Texture::Unwrap(obj);
@@ -31,7 +32,7 @@ public:
     }
 
     Texture(const Napi::CallbackInfo& info);
-    virtual ~Texture() = default;
+    virtual ~Texture();
 
 private:
     static Napi::FunctionReference m_ctor;

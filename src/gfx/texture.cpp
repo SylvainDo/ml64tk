@@ -40,6 +40,13 @@ Napi::Object Texture::initialize(Napi::Env env, Napi::Object exports) {
     return exports;
 }
 
+Napi::Object Texture::create(Napi::Env, int width, int height, void* pixels) {
+    const auto obj = m_ctor.New({});
+    auto instance = unwrap(obj);
+    instance->load(width, height, pixels);
+    return obj;
+}
+
 Texture::Texture(const Napi::CallbackInfo& info) : Napi::ObjectWrap<Texture>{ info } {
     glGenTextures(1, &m_id);
     glBindTexture(GL_TEXTURE_2D, m_id);
@@ -48,6 +55,10 @@ Texture::Texture(const Napi::CallbackInfo& info) : Napi::ObjectWrap<Texture>{ in
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+Texture::~Texture() {
+    glDeleteTextures(1, &m_id);
 }
 
 void* Texture::getIdPtr() const {
