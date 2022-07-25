@@ -97,7 +97,9 @@ AppWindow::AppWindow(const Napi::CallbackInfo& info) :
 }
 
 AppWindow::~AppWindow() {
+#ifdef _WIN32
     SDL_DelEventWatch(eventWatch, this);
+#endif
     ImGui::SetCurrentContext(m_imguiContext);
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplSDL2_Shutdown();
@@ -113,7 +115,9 @@ void AppWindow::doStep(Napi::Env env) {
         SDL_SetWindowPosition(m_window.get(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
         SDL_ShowWindow(m_window.get());
         SDL_FlashWindow(m_window.get(), SDL_FLASH_UNTIL_FOCUSED);
+#ifdef _WIN32
         SDL_AddEventWatch(eventWatch, this);
+#endif
         m_inited = true;
     }
 
