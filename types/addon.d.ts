@@ -1047,8 +1047,8 @@ export module ImGui {
         pathBezierQuadraticCurveTo(p2: Vec2, p3: Vec2, numSegments?: number): void;
         pathRect(rectMin: Vec2, rectMax: Vec2, rounding?: number, flags?: DrawFlags): void;
         addDrawCmd(): void;
-        addSprite(texture: Texture, pos: Vec2): void;
-        addSpriteEx(texture: Texture, options?: DrawSpriteOptions): void;
+        addSprite(texture: Gfx.Texture, pos: Vec2): void;
+        addSpriteEx(texture: Gfx.Texture, options?: DrawSpriteOptions): void;
     }
 
     const enum FreeTypeBuilderFlags {
@@ -1574,6 +1574,21 @@ export module Gui {
     function getAccentColor(): Color;
 }
 
+export module Gfx {
+    interface Texture {
+        equals(other: Texture): boolean;
+        loadFromFile(filename: string): void;
+        loadFromMemory(data: Uint8Array): void;
+        loadFromRGBA32(width: number, height: number, data: Uint8Array): void;
+        id: OpaquePointer;
+        size: Vec2;
+    }
+
+    export var Texture: {
+        new(): Texture;
+    };
+}
+
 type AppCallbackName = 'init' | 'before-new-frame' | 'new-frame' | 'before-render' | 'render' | 'drop-file';
 type AppCallbackVoid = () => void;
 type AppCallbackDropFile = (filename: string, viewport: ImGui.Viewport) => void;
@@ -1593,17 +1608,4 @@ interface AppWindow {
 
 export var AppWindow: {
     new(): AppWindow;
-};
-
-interface Texture {
-    equals(other: Texture): boolean;
-    loadFromFile(filename: string): void;
-    loadFromMemory(data: Uint8Array): void;
-    loadFromRGBA32(width: number, height: number, data: Uint8Array): void;
-    id: OpaquePointer;
-    size: Vec2;
-}
-
-export var Texture: {
-    new(): Texture;
 };

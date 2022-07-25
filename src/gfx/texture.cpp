@@ -1,7 +1,7 @@
 #include "core/type/instanceOf.hpp"
 #include "core/opaquePointer.hpp"
+#include "gfx/texture.hpp"
 #include "imgui/convert.hpp"
-#include "texture.hpp"
 
 #include <memory>
 
@@ -12,6 +12,8 @@
 using namespace core;
 using namespace core::type::convert;
 using namespace imgui;
+
+namespace gfx {
 
 Napi::FunctionReference Texture::m_ctor;
 
@@ -113,4 +115,6 @@ Napi::Value Texture::getId(const Napi::CallbackInfo& info) {
 
 Napi::Value Texture::getSize(const Napi::CallbackInfo& info) {
     return fromVec2(info.Env(), m_width, m_height);
+}
+
 }

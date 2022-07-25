@@ -31,6 +31,10 @@ set(SRC
 	"src/core/largeInteger.hpp"
 	"src/core/opaquePointer.cpp"
 	"src/core/opaquePointer.hpp"
+	"src/gfx/gfx.cpp"
+	"src/gfx/gfx.hpp"
+	"src/gfx/texture.cpp"
+	"src/gfx/texture.hpp"
 	"src/gui/dialogs.hpp"
 	"src/gui/gui.cpp"
 	"src/gui/gui.hpp"
@@ -72,8 +76,6 @@ set(SRC
 	"src/appWindow.cpp"
 	"src/appWindow.hpp"
 	"src/main.cpp"
-	"src/texture.cpp"
-	"src/texture.hpp"
 	)
 if(WIN32)
     set(PLATFORM_SRC

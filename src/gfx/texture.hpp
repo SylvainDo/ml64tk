@@ -2,6 +2,8 @@
 
 #include <napi.h>
 
+namespace gfx {
+
 class Texture final : public Napi::ObjectWrap<Texture> {
 public:
     static Napi::Object initialize(Napi::Env env, Napi::Object exports);
@@ -50,3 +52,5 @@ private:
     Napi::Value getId(const Napi::CallbackInfo& info);
     Napi::Value getSize(const Napi::CallbackInfo& info);
 };
+
+}

@@ -1,10 +1,10 @@
 #include "audio/audio.hpp"
 #include "core/largeInteger.hpp"
 #include "core/opaquePointer.hpp"
+#include "gfx/gfx.hpp"
 #include "gui/gui.hpp"
 #include "imgui/imgui.hpp"
 #include "appWindow.hpp"
-#include "texture.hpp"
 
 #include <fmt/format.h>
 #include <SDL.h>
@@ -69,8 +69,8 @@ Napi::Object initModule(Napi::Env env, Napi::Object exports) {
     exports.Set("Audio", audio::initialize(env, Napi::Object::New(env)));
     exports.Set("ImGui", imgui::initialize(env, Napi::Object::New(env)));
     exports.Set("Gui", gui::initialize(env, Napi::Object::New(env)));
+    exports.Set("Gfx", gfx::initialize(env, Napi::Object::New(env)));
     AppWindow::initialize(env, exports);
-    Texture::initialize(env, exports);
 
     return exports;
 }

@@ -1,9 +1,9 @@
 #include "core/type/instanceOf.hpp"
 #include "core/opaquePointer.hpp"
+#include "gfx/texture.hpp"
 #include "imgui/convert.hpp"
 #include "imgui/drawList.hpp"
 #include "imgui/font.hpp"
-#include "texture.hpp"
 
 #include <cmath>
 #include <array>
@@ -466,7 +466,7 @@ Napi::Value DrawList::addDrawCmd(const Napi::CallbackInfo& info) {
 }
 
 Napi::Value DrawList::addSprite(const Napi::CallbackInfo& info) {
-    const auto texture = Texture::unwrap(info[0]);
+    const auto texture = gfx::Texture::unwrap(info[0]);
     const auto pos = m_origin + asVec2(info[1]);
     m_val->AddImage(texture->getIdPtr(), pos, pos + ImVec2(texture->getWidth(), texture->getHeight()));
     return info.Env().Undefined();
@@ -499,7 +499,7 @@ inline ImVec2 truncVec2(ImVec2 v) {
 }
 
 Napi::Value DrawList::addSpriteEx(const Napi::CallbackInfo& info) {
-    const auto texture = Texture::unwrap(info[0]);
+    const auto texture = gfx::Texture::unwrap(info[0]);
     ImVec4 src(0.0f, 0.0f, texture->getWidth(), texture->getHeight());
     auto dst = src;
     ImColor tint{ IM_COL32_WHITE};
