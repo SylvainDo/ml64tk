@@ -14,6 +14,17 @@ else()
 endif()
 
 set(SRC
+	"src/audio/audio.cpp"
+	"src/audio/audio.hpp"
+	"src/audio/convert.hpp"
+	"src/audio/listener.cpp"
+	"src/audio/listener.hpp"
+	"src/audio/music.cpp"
+	"src/audio/music.hpp"
+	"src/audio/sound.cpp"
+	"src/audio/sound.hpp"
+	"src/audio/soundBuffer.cpp"
+	"src/audio/soundBuffer.hpp"
 	"src/core/type/convert.hpp"
 	"src/core/type/instanceOf.hpp"
 	"src/core/byteswap.hpp"
@@ -84,10 +95,11 @@ find_package(OpenGL REQUIRED)
 find_package(freetype CONFIG REQUIRED)
 find_package(sdl2-image CONFIG REQUIRED)
 find_package(sdl2-ttf CONFIG REQUIRED)
+find_package(SFML COMPONENTS audio CONFIG REQUIRED)
 
 add_library(ml64tk SHARED ${SRC} ${PLATFORM_SRC})
 target_include_directories(ml64tk PRIVATE "${CMAKE_SOURCE_DIR}/src")
-target_link_libraries(ml64tk PRIVATE fmt::fmt SDL2::SDL2 OpenGL::GL glad freetype imgui SDL2::SDL2_image SDL2::SDL2_ttf)
+target_link_libraries(ml64tk PRIVATE fmt::fmt SDL2::SDL2 OpenGL::GL glad freetype imgui SDL2::SDL2_image SDL2::SDL2_ttf sfml-audio)
 configure_node_module(ml64tk)
 
 if (WIN32)

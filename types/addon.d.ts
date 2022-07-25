@@ -107,6 +107,86 @@ interface HSV {
 
 type Color = RGBA;
 
+export module Audio {
+    const enum SoundSourceStatus {
+        Stopped,
+        Paused,
+        Playing
+    }
+
+    interface SoundSource {
+        pitch: number;
+        volume: number;
+        position: Vec3;
+        relativeToListener: boolean;
+        minDistance: number;
+        attenuation: number;
+        play(): void;
+        pause(): void;
+        stop(): void;
+        status: SoundSourceStatus;
+    }
+
+    interface SoundStream extends SoundSource {
+        channelCount: number;
+        sampleRate: number;
+        playingOffset: number;
+        loop: boolean;
+    }
+
+    interface SoundBuffer {
+        equals(other: SoundBuffer): boolean;
+        loadFromFile(filename: string): void;
+        loadFromMemory(data: Uint8Array): void;
+        loadFromSamples(samples: Int16Array, channelCount: number, sampleRate: number): void;
+        saveToFile(filename: string): void;
+        samples: Int16Array;
+        sampleCount: bigint;
+        sampleRate: number;
+        channelCount: number;
+        duration: number;
+    }
+
+    var SoundBuffer: {
+        new(): SoundBuffer;
+    };
+
+    interface Sound extends SoundSource {
+        equals(other: Sound): boolean;
+        buffer: SoundBuffer | undefined;
+        loop: boolean;
+        playingOffset: number;
+    }
+
+    var Sound: {
+        new(): Sound;
+    };
+
+    interface TimeSpan {
+        offset: number;
+        length: number;
+    }
+
+    interface Music extends SoundStream {
+        equals(other: Music): boolean;
+        openFromFile(filename: string): void;
+        openFromMemory(data: Uint8Array): void;
+        duration: number;
+        loopPoints: TimeSpan;
+    }
+
+    var Music: {
+        new(): Music;
+    };
+
+    var Listener: {
+        globalVolume: number;
+        position: Vec3;
+        direction: Vec3;
+        upVector: Vec3;
+    };
+}
+
 export module ImGui {
     const enum WindowFlags {
         None = 0,
