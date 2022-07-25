@@ -538,8 +538,8 @@ Napi::Value DrawList::addSpriteEx(const Napi::CallbackInfo& info) {
         verts[3] = offset + ImVec2{ dstX, dstY + dst.w };
     }
     else {
-        const auto rcos = std::cosf(angle * 0.0174533);
-        const auto rsin = std::sinf(angle * 0.0174533);
+        const auto rcos = cosf(angle * 0.0174533f);
+        const auto rsin = sinf(angle * 0.0174533f);
         const auto pos = offset + m_origin + ImVec2{ dst.z / 2, dst.w / 2 };
         verts[0] = pos + rotateVec2({ -dst.z * 0.5f, -dst.w * 0.5f }, rcos, rsin);
         verts[1] = pos + rotateVec2({ dst.z * 0.5f, -dst.w * 0.5f }, rcos, rsin);
