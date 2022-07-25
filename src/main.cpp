@@ -42,6 +42,7 @@ static void initialize(Napi::Env env) {
         throw Napi::Error::New(env, fmt::format("failed to initialize sdl2 ttf: {}", TTF_GetError()));
     SDL_DisableScreenSaver();
 #ifndef _WIN32
+    setenv("LC_ALL", "en_US.UTF-8", true);
     if (setenv("GSK_RENDERER", "cairo", true) != 0)
         throw Napi::Error::New(env, "failed to override GSK_RENDERER environment variable");
     if (!gtk_init_check())
