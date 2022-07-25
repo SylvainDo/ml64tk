@@ -61,6 +61,8 @@ set(SRC
 	"src/imgui/ioUserData.hpp"
 	"src/imgui/keyData.cpp"
 	"src/imgui/keyData.hpp"
+	"src/imgui/memoryEditor.cpp"
+	"src/imgui/memoryEditor.hpp"
 	"src/imgui/payload.cpp"
 	"src/imgui/payload.hpp"
 	"src/imgui/sizeCallbackData.cpp"

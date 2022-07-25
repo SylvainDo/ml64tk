@@ -1,4 +1,5 @@
 set(DIR "${CMAKE_SOURCE_DIR}/vendor/imgui-docking")
+set(CLUB_DIR "${CMAKE_SOURCE_DIR}/vendor/imgui_club")
 
 list(APPEND COMPILE_DEFS "IMGUI_DISABLE_OBSOLETE_FUNCTIONS")
 list(APPEND COMPILE_DEFS "IMGUI_DISABLE_OBSOLETE_KEYIO")
@@ -8,6 +9,7 @@ list(APPEND INC_DIRS "${DIR}")
 list(APPEND INC_DIRS "${DIR}/backends")
 list(APPEND INC_DIRS "${DIR}/misc/cpp")
 list(APPEND INC_DIRS "${DIR}/misc/freetype")
+list(APPEND INC_DIRS "${CLUB_DIR}/imgui_memory_editor")
 
 set(SRC
 	"${DIR}/backends/imgui_impl_opengl3_loader.h"
@@ -28,7 +30,8 @@ set(SRC
 	"${DIR}/imgui.h"
 	"${DIR}/imstb_rectpack.h"
 	"${DIR}/imstb_textedit.h"
-	"${DIR}/imstb_truetype.h")
+	"${DIR}/imstb_truetype.h"
+	"${CLUB_DIR}/imgui_memory_editor/imgui_memory_editor.h")
 
 add_library(imgui INTERFACE IMPORTED)
 set_target_properties(imgui PROPERTIES

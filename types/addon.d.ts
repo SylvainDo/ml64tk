@@ -1172,6 +1172,29 @@ export module ImGui {
         getWorkCenter(): Vec2;
     }
 
+    interface MemoryEditor {
+        equals(other: MemoryEditor): boolean;
+        open: boolean;
+        readOnly: boolean;
+        cols: number;
+        optShowOptions: boolean;
+        optShowDataPreview: boolean;
+        optShowHexII: boolean;
+        optShowAscii: boolean;
+        optGreyOutZeroes: boolean;
+        optUpperCaseHex: boolean;
+        optMidColsCount: number;
+        optAddrDigitsCount: number;
+        optFooterExtraHeight: number;
+        highlightColor: Color;
+        drawWindow(title: string, data: ArrayBuffer | OpaquePointer, size: LargeIntegerOperand, baseDisplayAddr?: LargeIntegerOperand): void;
+        drawContents(data: ArrayBuffer | OpaquePointer, size: LargeIntegerOperand, baseDisplayAddr?: LargeIntegerOperand): void;
+    }
+
+    var MemoryEditor: {
+        new(): MemoryEditor;
+    };
+
     type boolRef = boolean[];
     type numberRef = number[];
     type stringRef = string[];

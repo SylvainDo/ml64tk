@@ -118,6 +118,15 @@ struct LargeInteger : Napi::ObjectWrap<LargeInteger<Signed>> {
         return LargeInteger::Unwrap(valueAsObject(val));
     }
 
+    template <class T>
+    static ValueQuadPartType get(const T& val) {
+        return static_cast<ValueQuadPartType>(valueFrom(val).quadPart);
+    }
+
+    ValueQuadPartType get() {
+        return value.quadPart;
+    }
+
     LargeInteger(const Napi::CallbackInfo& info) : Napi::ObjectWrap<LargeInteger>{ info } {
         if (info.Length() == 1) value = valueFrom(info[0]);
     }

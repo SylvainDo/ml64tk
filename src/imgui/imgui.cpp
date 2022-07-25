@@ -11,6 +11,7 @@
 #include "imgui/io.hpp"
 #include "imgui/ioUserData.hpp"
 #include "imgui/keyData.hpp"
+#include "imgui/memoryEditor.hpp"
 #include "imgui/payload.hpp"
 #include "imgui/sizeCallbackData.hpp"
 #include "imgui/style.hpp"
@@ -2085,6 +2086,7 @@ Napi::Object initialize(Napi::Env env, Napi::Object exports) {
     TableSortSpecs::initialize(env, exports);
     Viewport::initialize(env, exports);
     WindowClass::initialize(env, exports);
+    MemoryEditor_::initialize(env, exports);
 
     exports.Set("getIO", Napi::Function::New(env, getIO));
     exports.Set("getStyle", Napi::Function::New(env, getStyle));
