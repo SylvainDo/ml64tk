@@ -5,7 +5,6 @@
 
 #include <fmt/format.h>
 
-using namespace core;
 using namespace core::type::convert;
 using namespace imgui;
 
