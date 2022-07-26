@@ -59,6 +59,8 @@ private:
     void call(Callback callback, const std::initializer_list<napi_value>& args = {});
     static int eventWatch(void* userdata, SDL_Event* event);
 
+    static Napi::Value getTicks(const Napi::CallbackInfo& info);
+
     Napi::Value getTypeId(const Napi::CallbackInfo& info);
     Napi::Value toDebugString(const Napi::CallbackInfo& info);
     Napi::Value ref(const Napi::CallbackInfo& info);

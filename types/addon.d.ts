@@ -1652,4 +1652,5 @@ interface AppWindow {
 
 export var AppWindow: {
     new(): AppWindow;
+    ticks: number;
 };

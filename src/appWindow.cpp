@@ -18,6 +18,8 @@ AppWindow* AppWindow::m_instance;
 Napi::Object AppWindow::initialize(Napi::Env env, Napi::Object exports) {
     constexpr const char* className = "AppWindow";
     const auto class_ = DefineClass(env, className, {
+        StaticAccessor<&AppWindow::getTicks>("ticks"),
+
         InstanceAccessor<&AppWindow::getTypeId>("typeId"),
         InstanceAccessor<&AppWindow::toDebugString>("debugString"),
         InstanceMethod<&AppWindow::ref>("ref"),
@@ -180,6 +182,10 @@ int AppWindow::eventWatch(void* userdata, SDL_Event* event) {
         && (event->window.event == SDL_WINDOWEVENT_SIZE_CHANGED || event->window.event == SDL_WINDOWEVENT_MOVED))
         thisx->doFrame();
     return 0;
+}
+
+Napi::Value AppWindow::getTicks(const Napi::CallbackInfo& info) {
+    return fromF64(info.Env(), static_cast<double>(SDL_GetTicks64()));
 }
 
 Napi::Value AppWindow::getTypeId(const Napi::CallbackInfo& info) {
