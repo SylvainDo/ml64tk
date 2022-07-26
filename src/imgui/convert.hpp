@@ -77,7 +77,7 @@ inline ImColor asColor(const Napi::Value& val) {
     using namespace core::type::convert;
 
     auto obj = valueAsObject(val);
-    return { asF32(obj.Get("r")), asF32(obj.Get("g")), asF32(obj.Get("b")), asF32(obj.Get("a")) };
+    return { asF32(obj.Get("x")), asF32(obj.Get("y")), asF32(obj.Get("z")), asF32(obj.Get("w")) };
 }
 
 inline ImColor asColorOr(const Napi::Value& val, ImColor defaultVal) {
@@ -88,10 +88,10 @@ inline Napi::Value fromColor(Napi::Env env, ImColor val) {
     using namespace core::type::convert;
 
     auto obj = Napi::Object::New(env);
-    obj.Set("r", fromF32(env, val.Value.x));
-    obj.Set("g", fromF32(env, val.Value.y));
-    obj.Set("b", fromF32(env, val.Value.z));
-    obj.Set("a", fromF32(env, val.Value.w));
+    obj.Set("x", fromF32(env, val.Value.x));
+    obj.Set("y", fromF32(env, val.Value.y));
+    obj.Set("z", fromF32(env, val.Value.z));
+    obj.Set("w", fromF32(env, val.Value.w));
 
     return obj;
 }

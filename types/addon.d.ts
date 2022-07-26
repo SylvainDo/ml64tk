@@ -86,27 +86,6 @@ interface Vec4 {
     w: number
 }
 
-interface RGBA {
-    r: number,
-    g: number,
-    b: number,
-    a: number
-}
-
-interface RGB {
-    r: number,
-    g: number,
-    b: number
-}
-
-interface HSV {
-    h: number,
-    s: number,
-    v: number
-}
-
-type Color = RGBA;
-
 export module Audio {
     const enum SoundSourceStatus {
         Stopped,
@@ -768,8 +747,8 @@ export module ImGui {
         antiAliasedFill: boolean;
         curveTessellationTol: number;
         circleTessellationMaxError: number;
-        getColorAt(index: Col): Color;
-        setColorAt(index: Col, value: Color): void;
+        getColorAt(index: Col): Vec4;
+        setColorAt(index: Col, value: Vec4): void;
         scaleAllSizes(scaleFactor: number): void;
     }
 
@@ -997,7 +976,7 @@ export module ImGui {
     interface DrawSpriteOptions {
         src?: Vec4;
         dst?: Vec4;
-        tint?: Color;
+        tint?: Vec4;
         flip?: DrawFlipFlags;
         angle?: number;
         offset?: Vec2;
@@ -1015,32 +994,32 @@ export module ImGui {
         popTextureId(): void;
         getClipRectMin(): Vec2;
         getClipRectMax(): Vec2;
-        addLine(p1: Vec2, p2: Vec2, col: Color, thickness?: number): void;
-        addRect(pMin: Vec2, pMax: Vec2, col: Color, rounding?: number, flags?: DrawFlags, thickness?: number): void;
-        addRectFilled(pMin: Vec2, pMax: Vec2, col: Color, rounding?: number, flags?: DrawFlags): void;
-        addRectFilledMultiColor(pMin: Vec2, pMax: Vec2, colUprLeft: Color, colUprRight: Color, colBotRight: Color, colBotLeft: Color): void;
-        addQuad(p1: Vec2, p2: Vec2, p3: Vec2, p4: Vec2, col: Color, thickness?: number): void;
-        addQuadFilled(p1: Vec2, p2: Vec2, p3: Vec2, p4: Vec2, col: Color): void;
-        addTriangle(p1: Vec2, p2: Vec2, p3: Vec2, col: Color, thickness?: number): void;
-        addTriangleFilled(p1: Vec2, p2: Vec2, p3: Vec2, col: Color): void;
-        addCircle(center: Vec2, radius: number, col: Color, numSegments?: number, thickness?: number): void;
-        addCircleFilled(center: Vec2, radius: number, col: Color, numSegments?: number): void;
-        addNgon(center: Vec2, radius: number, col: Color, numSegments: number, thickness?: number): void;
-        addNgonFilled(center: Vec2, radius: number, col: Color, numSegments: number): void;
-        addText(pos: Vec2, col: Color, text: string): void;
-        addText(font: Font, fontSize: number, pos: Vec2, col: Color, text: string, wrapWidth?: number, cpuFineClipRect?: Vec4): void;
-        addPolyline(points: Vec2[], col: Color, flags?: DrawFlags, thickness?: number): void;
-        addConvexPolyFilled(points: Vec2[], col: Color): void;
-        addBezierCubic(p1: Vec2, p2: Vec2, p3: Vec2, p4: Vec2, col: Color, thickness?: number, numSegments?: number): void;
-        addBezierQuadratic(p1: Vec2, p2: Vec2, p3: Vec2, col: Color, thickness?: number, numSegments?: number): void;
-        addImage(userTextureId: OpaquePointer, pMin: Vec2, pMax: Vec2, uvMin?: Vec2, uvMax?: Vec2, col?: Color): void;
-        addImageQuad(userTextureId: OpaquePointer, p1: Vec2, p2: Vec2, p3: Vec2, p4: Vec2, uv1?: Vec2, uv2?: Vec2, uv3?: Vec2, uv4?: Vec2, col?: Color): void;
-        addImageRounded(userTextureId: OpaquePointer, pMin: Vec2, pMax: Vec2, uvMin?: Vec2, uvMax?: Vec2, col?: Color, rounding?: number, flags?: DrawFlags): void;
+        addLine(p1: Vec2, p2: Vec2, col: Vec4, thickness?: number): void;
+        addRect(pMin: Vec2, pMax: Vec2, col: Vec4, rounding?: number, flags?: DrawFlags, thickness?: number): void;
+        addRectFilled(pMin: Vec2, pMax: Vec2, col: Vec4, rounding?: number, flags?: DrawFlags): void;
+        addRectFilledMultiColor(pMin: Vec2, pMax: Vec2, colUprLeft: Vec4, colUprRight: Vec4, colBotRight: Vec4, colBotLeft: Vec4): void;
+        addQuad(p1: Vec2, p2: Vec2, p3: Vec2, p4: Vec2, col: Vec4, thickness?: number): void;
+        addQuadFilled(p1: Vec2, p2: Vec2, p3: Vec2, p4: Vec2, col: Vec4): void;
+        addTriangle(p1: Vec2, p2: Vec2, p3: Vec2, col: Vec4, thickness?: number): void;
+        addTriangleFilled(p1: Vec2, p2: Vec2, p3: Vec2, col: Vec4): void;
+        addCircle(center: Vec2, radius: number, col: Vec4, numSegments?: number, thickness?: number): void;
+        addCircleFilled(center: Vec2, radius: number, col: Vec4, numSegments?: number): void;
+        addNgon(center: Vec2, radius: number, col: Vec4, numSegments: number, thickness?: number): void;
+        addNgonFilled(center: Vec2, radius: number, col: Vec4, numSegments: number): void;
+        addText(pos: Vec2, col: Vec4, text: string): void;
+        addText(font: Font, fontSize: number, pos: Vec2, col: Vec4, text: string, wrapWidth?: number, cpuFineClipRect?: Vec4): void;
+        addPolyline(points: Vec2[], col: Vec4, flags?: DrawFlags, thickness?: number): void;
+        addConvexPolyFilled(points: Vec2[], col: Vec4): void;
+        addBezierCubic(p1: Vec2, p2: Vec2, p3: Vec2, p4: Vec2, col: Vec4, thickness?: number, numSegments?: number): void;
+        addBezierQuadratic(p1: Vec2, p2: Vec2, p3: Vec2, col: Vec4, thickness?: number, numSegments?: number): void;
+        addImage(userTextureId: OpaquePointer, pMin: Vec2, pMax: Vec2, uvMin?: Vec2, uvMax?: Vec2, col?: Vec4): void;
+        addImageQuad(userTextureId: OpaquePointer, p1: Vec2, p2: Vec2, p3: Vec2, p4: Vec2, uv1?: Vec2, uv2?: Vec2, uv3?: Vec2, uv4?: Vec2, col?: Vec4): void;
+        addImageRounded(userTextureId: OpaquePointer, pMin: Vec2, pMax: Vec2, uvMin?: Vec2, uvMax?: Vec2, col?: Vec4, rounding?: number, flags?: DrawFlags): void;
         pathClear(): void;
         pathLineTo(pos: Vec2): void;
         pathLineToMergeDuplicate(pos: Vec2): void;
-        pathFillConvex(col: Color): void;
-        pathStroke(col: Color, flags?: DrawFlags, thickness?: number): void;
+        pathFillConvex(col: Vec4): void;
+        pathStroke(col: Vec4, flags?: DrawFlags, thickness?: number): void;
         pathArcTo(center: Vec2, radius: number, aMin: number, aMax: number, numSegments?: number): void;
         pathArcToFast(center: Vec2, radius: number, aMinOf12: number, aMaxOf12: number): void;
         pathBezierCubicCurveTo(p2: Vec2, p3: Vec2, p4: Vec2, numSegments?: number): void;
@@ -1135,8 +1114,8 @@ export module ImGui {
         getCharAdvance(c: number): number;
         calcTextSizeA(size: number, maxWidth: number, wrapWidth: number, text: string): Vec2;
         calcWordWrapPositionA(scale: number, text: string, wrapWidth: number): string;
-        renderChar(drawList: DrawList, size: number, pos: Vec2, col: Color, c: number): void;
-        renderText(drawList: DrawList, size: number, pos: Vec2, col: Color, clipRect: Vec4, text: string, wrapWidth?: number, cpuFineClip?: boolean): void;
+        renderChar(drawList: DrawList, size: number, pos: Vec2, col: Vec4, c: number): void;
+        renderText(drawList: DrawList, size: number, pos: Vec2, col: Vec4, clipRect: Vec4, text: string, wrapWidth?: number, cpuFineClip?: boolean): void;
     }
 
     const enum ViewportFlags {
@@ -1186,7 +1165,7 @@ export module ImGui {
         optMidColsCount: number;
         optAddrDigitsCount: number;
         optFooterExtraHeight: number;
-        highlightColor: Color;
+        highlightColor: Vec4;
         drawWindow(title: string, data: ArrayBuffer | OpaquePointer, size: LargeIntegerOperand, baseDisplayAddr?: LargeIntegerOperand): void;
         drawContents(data: ArrayBuffer | OpaquePointer, size: LargeIntegerOperand, baseDisplayAddr?: LargeIntegerOperand): void;
     }
@@ -1263,7 +1242,7 @@ export module ImGui {
     function setScrollFromPosY(localY: number, centerYRatio?: number): void;
     function pushFont(font?: Font): void;
     function popFont(): void;
-    function pushStyleColor(idx: Col, col: Color): void;
+    function pushStyleColor(idx: Col, col: Vec4): void;
     function popStyleColor(count?: number): void;
     function pushStyleVar(idx: StyleVar, val: number): void;
     function pushStyleVar(idx: StyleVar, val: Vec2): void;
@@ -1281,7 +1260,7 @@ export module ImGui {
     function getFont(): Font;
     function getFontSize(): number;
     function getFontTexUvWhitePixel(): Vec2;
-    function getStyleColor(idx: Col): Color;
+    function getStyleColor(idx: Col): Vec4;
     function separator(): void;
     function sameLine(offsetFromStartX?: number, spacing?: number): void;
     function newLine(): void;
@@ -1312,7 +1291,7 @@ export module ImGui {
     function getId(id: string): number;
     function getId(id: OpaquePointer): number;
     function text(text: string): void;
-    function textColored(col: Color, text: string): void;
+    function textColored(col: Vec4, text: string): void;
     function textDisabled(text: string): void;
     function textWrapped(text: string): void;
     function labelText(label: string, text: string): void;
@@ -1321,8 +1300,8 @@ export module ImGui {
     function smallButton(label: string): boolean;
     function invisibleButton(id: string, size: Vec2, flags?: ButtonFlags): boolean;
     function arrowButton(id: string, dir: Dir): boolean;
-    function image(userTextureId: OpaquePointer, size: Vec2, uv0?: Vec2, uv1?: Vec2, tintCol?: Color, borderCol?: Color): void;
-    function imageButton(userTextureId: OpaquePointer, size: Vec2, uv0?: Vec2, uv1?: Vec2, framePadding?: number, bgCol?: Color, tintCol?: Color): boolean;
+    function image(userTextureId: OpaquePointer, size: Vec2, uv0?: Vec2, uv1?: Vec2, tintCol?: Vec4, borderCol?: Vec4): void;
+    function imageButton(userTextureId: OpaquePointer, size: Vec2, uv0?: Vec2, uv1?: Vec2, framePadding?: number, bgCol?: Vec4, tintCol?: Vec4): boolean;
     function checkbox(label: string, v: boolRef): boolean;
     function checkboxFlags(label: string, flags: numberRef, flagsValue: number): boolean;
     function radioButton(label: string, active: boolean): boolean;
@@ -1345,11 +1324,11 @@ export module ImGui {
     function inputTextWithHint(label: string, hint: string, str: stringRef, flags?: InputTextFlags, callback?: (data: InputTextCallbackData) => number): boolean;
     function inputNumber(label: string, v: numberRef, step?: number, stepFast?: number, format?: string, flags?: InputTextFlags): boolean;
     function inputNumbers(label: string, v: number[], step?: number, stepFast?: number, format?: string, flags?: InputTextFlags): boolean;
-    function colorEdit3(label: string, col: Color, flags?: ColorEditFlags): boolean;
-    function colorEdit4(label: string, col: Color, flags?: ColorEditFlags): boolean;
-    function colorPicker3(label: string, col: Color, flags?: ColorEditFlags): boolean;
-    function colorPicker4(label: string, col: Color, flags?: ColorEditFlags, refCol?: Color): boolean;
-    function colorButton(descId: string, col: Color, flags?: ColorEditFlags, size?: Vec2): boolean;
+    function colorEdit3(label: string, col: Vec4, flags?: ColorEditFlags): boolean;
+    function colorEdit4(label: string, col: Vec4, flags?: ColorEditFlags): boolean;
+    function colorPicker3(label: string, col: Vec4, flags?: ColorEditFlags): boolean;
+    function colorPicker4(label: string, col: Vec4, flags?: ColorEditFlags, refCol?: Vec4): boolean;
+    function colorButton(descId: string, col: Vec4, flags?: ColorEditFlags, size?: Vec2): boolean;
     function setColorEditOptions(flags: ColorEditFlags): void;
     function treeNode(label: string): boolean;
     function treeNode(id: string, text: string): boolean;
@@ -1414,7 +1393,7 @@ export module ImGui {
     function tableGetColumnName(columnN?: number): string;
     function tableGetColumnFlags(columnN?: number): TableColumnFlags;
     function tableSetColumnEnabled(columnN: number, v: boolean): void;
-    function tableSetBgColor(target: TableBgTarget, color: Color, columnN?: number): void;
+    function tableSetBgColor(target: TableBgTarget, color: Vec4, columnN?: number): void;
     function columns(count?: number, id?: string, border?: boolean): void;
     function nextColumn(): void;
     function getColumnIndex(): number;
@@ -1484,8 +1463,8 @@ export module ImGui {
     function beginChildFrame(id: number, size: Vec2, flags?: WindowFlags): boolean;
     function endChildFrame(): void;
     function calcTextSize(text: string, hideTextAfterDoubleHash?: boolean, wrapWidth?: number): Vec2;
-    function colorConvertRGBtoHSV(color: RGB): HSV;
-    function colorConvertHSVtoRGB(color: HSV): RGB;
+    function colorConvertRGBtoHSV(rgb: Vec3): Vec3;
+    function colorConvertHSVtoRGB(hsv: Vec3): Vec3;
     function isKeyDown(key: Key): boolean;
     function isKeyPressed(key: Key, repeat?: boolean): boolean;
     function isKeyReleased(key: Key): boolean;
@@ -1594,7 +1573,7 @@ export module Gui {
     }
 
     function getColorScheme(): ColorScheme;
-    function getAccentColor(): Color;
+    function getAccentColor(): Vec4;
 }
 
 export module Gfx {
@@ -1615,8 +1594,8 @@ export module Gfx {
         equals(other: Font): boolean;
         loadFromFile(filename: string, ptSize: number): void;
         loadFromMemory(data: Uint8Array, ptSize: number): void;
-        fillColor: Color;
-        outlineColor: Color;
+        fillColor: Vec4;
+        outlineColor: Vec4;
         outlineThickness: number;
         renderText(text: string): Texture;
     }
@@ -1640,7 +1619,7 @@ interface AppWindow {
     size: Vec2;
     minimumSize: Vec2;
     maximumSize: Vec2;
-    clearColor: Color;
+    clearColor: Vec4;
 }
 
 export var AppWindow: {

@@ -66,10 +66,10 @@ public:
 
     ~ColorRef() {
         if (!m_object.IsUndefined()) {
-            m_object.Set("r", fromF32(m_object.Env(), m_value.Value.x));
-            m_object.Set("g", fromF32(m_object.Env(), m_value.Value.y));
-            m_object.Set("b", fromF32(m_object.Env(), m_value.Value.z));
-            m_object.Set("a", fromF32(m_object.Env(), m_value.Value.w));
+            m_object.Set("x", fromF32(m_object.Env(), m_value.Value.x));
+            m_object.Set("y", fromF32(m_object.Env(), m_value.Value.y));
+            m_object.Set("z", fromF32(m_object.Env(), m_value.Value.z));
+            m_object.Set("w", fromF32(m_object.Env(), m_value.Value.w));
         }
     }
 
@@ -1903,10 +1903,10 @@ Napi::Value colorConvertRGBtoHSV(const Napi::CallbackInfo& info) {
     const auto inObj = valueAsObject(info[0]);
     const auto outObj = Napi::Object::New(info.Env());
     float h, s, v;
-    ImGui::ColorConvertRGBtoHSV(asF32(inObj.Get("r")), asF32(inObj.Get("g")), asF32(inObj.Get("b")), h, s, v);
-    outObj.Set("h", fromF32(info.Env(), h));
-    outObj.Set("s", fromF32(info.Env(), s));
-    outObj.Set("v", fromF32(info.Env(), v));
+    ImGui::ColorConvertRGBtoHSV(asF32(inObj.Get("x")), asF32(inObj.Get("y")), asF32(inObj.Get("z")), h, s, v);
+    outObj.Set("x", fromF32(info.Env(), h));
+    outObj.Set("y", fromF32(info.Env(), s));
+    outObj.Set("z", fromF32(info.Env(), v));
     return outObj;
 }
 
@@ -1914,10 +1914,10 @@ Napi::Value colorConvertHSVtoRGB(const Napi::CallbackInfo& info) {
     const auto inObj = valueAsObject(info[0]);
     const auto outObj = Napi::Object::New(info.Env());
     float r, g, b;
-    ImGui::ColorConvertHSVtoRGB(asF32(inObj.Get("h")), asF32(inObj.Get("s")), asF32(inObj.Get("v")), r, g, b);
-    outObj.Set("r", fromF32(info.Env(), r));
-    outObj.Set("g", fromF32(info.Env(), g));
-    outObj.Set("b", fromF32(info.Env(), b));
+    ImGui::ColorConvertHSVtoRGB(asF32(inObj.Get("x")), asF32(inObj.Get("y")), asF32(inObj.Get("z")), r, g, b);
+    outObj.Set("x", fromF32(info.Env(), r));
+    outObj.Set("y", fromF32(info.Env(), g));
+    outObj.Set("z", fromF32(info.Env(), b));
     return outObj;
 }
 
