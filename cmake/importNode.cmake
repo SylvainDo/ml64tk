@@ -9,7 +9,7 @@ list(APPEND INCLUDE_DIRECTORIES "${NODE_DEV_DIR}/include/node")
 list(APPEND INCLUDE_DIRECTORIES "${NODE_ADDON_DEV_DIR}")
 
 if(WIN32)
-    list(APPEND LINK_LIBRARIES "${NODE_DEV_DIR}/lib/${PROCESS_XARCH}/node.lib")
+    list(APPEND LINK_LIBRARIES "${NODE_DEV_DIR}/lib/${TARGET_XARCH}/node.lib")
     list(APPEND LINK_LIBRARIES "delayimp.lib")
 endif()
 
@@ -28,6 +28,6 @@ function(configure_node_module target)
     target_link_libraries(${target} PRIVATE node-addon-api)
     set_target_properties(${target} PROPERTIES
         PREFIX ""
-        SUFFIX "-${PROCESS_PLATFORM}-${PROCESS_ARCH}.node"
-        PDB_NAME "${target}-${PROCESS_PLATFORM}-${PROCESS_ARCH}")
+        SUFFIX "-${TARGET_PLATFORM}-${TARGET_ARCH}.node"
+        PDB_NAME "${target}-${TARGET_PLATFORM}-${TARGET_ARCH}")
 endfunction()
