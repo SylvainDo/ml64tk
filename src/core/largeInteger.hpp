@@ -109,6 +109,12 @@ struct LargeInteger : Napi::ObjectWrap<LargeInteger<Signed>> {
         return obj;
     }
 
+    static Napi::Object create(Napi::Env, ValueQuadPartType val) {
+        const auto obj = constructor.New({});
+        unwrap(obj)->value.quadPart = val;
+        return obj;
+    }
+
     static LargeInteger* unwrap(const Napi::Object& obj) {
         return LargeInteger::Unwrap(obj);
     }

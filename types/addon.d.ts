@@ -86,6 +86,34 @@ interface Vec4 {
     w: number
 }
 
+export module $ {
+    function xy(x: number, y: number): Vec2;
+    function xyz(x: number, y: number, z: number): Vec3;
+    function xyz(xy: Vec2, z: number): Vec3;
+    function xyzw(x: number, y: number, z: number, w: number): Vec4;
+    function xyzw(xy: Vec2, zw: Vec2): Vec4;
+    function xyzw(xyz: Vec3, w: number): Vec4;
+    function rgbf(r: number, g: number, b: number): Vec4;
+    function rgbaf(r: number, g: number, b: number, a: number): Vec4;
+    function rgb(r: number, g: number, b: number): Vec4;
+    function rgba(r: number, g: number, b: number, a: number): Vec4;
+    function v2eq(lhs: Vec2, rhs: Vec2): boolean;
+    function v2add(lhs: Vec2, rhs: Vec2): Vec2;
+    function v2mul(lhs: Vec2, rhs: number): Vec2;
+    function v3eq(lhs: Vec3, rhs: Vec3): boolean;
+    function v4eq(lhs: Vec4, rhs: Vec4): boolean;
+    function lerp(from: number, to: number, t: number): number;
+    function v2lerp(from: Vec2, to: Vec2, t: number): Vec2;
+    function v3lerp(from: Vec3, to: Vec3, t: number): Vec3;
+    function v4lerp(from: Vec4, to: Vec4, t: number): Vec4;
+    function sli(v: LargeIntegerOperand): LargeInteger;
+    function slinum(v: LargeIntegerOperand): number;
+    function slibig(v: LargeIntegerOperand): bigint;
+    function uli(v: LargeIntegerOperand): LargeInteger;
+    function ulinum(v: LargeIntegerOperand): number;
+    function ulibig(v: LargeIntegerOperand): bigint;
+}
+
 export module Audio {
     const enum SoundSourceStatus {
         Stopped,

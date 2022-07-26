@@ -1,6 +1,7 @@
 #include "audio/audio.hpp"
 #include "core/largeInteger.hpp"
 #include "core/opaquePointer.hpp"
+#include "dollar/dollar.hpp"
 #include "gfx/gfx.hpp"
 #include "gui/gui.hpp"
 #include "imgui/imgui.hpp"
@@ -66,6 +67,7 @@ Napi::Object initModule(Napi::Env env, Napi::Object exports) {
     core::SignedLargeInteger::initialize(env, exports);
     core::UnsignedLargeInteger::initialize(env, exports);
     core::OpaquePointer::initialize(env, exports);
+    exports.Set("$", dollar::initialize(env, Napi::Object::New(env)));
     exports.Set("Audio", audio::initialize(env, Napi::Object::New(env)));
     exports.Set("ImGui", imgui::initialize(env, Napi::Object::New(env)));
     exports.Set("Gui", gui::initialize(env, Napi::Object::New(env)));
