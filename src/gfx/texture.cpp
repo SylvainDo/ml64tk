@@ -47,28 +47,37 @@ Napi::Object Texture::create(Napi::Env, int width, int height, void* pixels) {
     return obj;
 }
 
-Texture::Texture(const Napi::CallbackInfo& info) : Napi::ObjectWrap<Texture>{ info } {
-    glGenTextures(1, &m_id);
-    glBindTexture(GL_TEXTURE_2D, m_id);
+Texture::Texture(const Napi::CallbackInfo& info) : Napi::ObjectWrap<Texture>{ info } {}
+
+Texture::~Texture() {
+    if (m_id) {
+        const auto id = m_id.value();
+        glDeleteTextures(1, &id);
+    }
+}
+
+void* Texture::getIdPtr() const {
+    void* ptr;
+    const auto id = m_id.value();
+    std::memcpy(&ptr, &id, sizeof id);
+    return ptr;
+}
+
+void Texture::create() {
+    unsigned id;
+    glGenTextures(1, &id);
+    glBindTexture(GL_TEXTURE_2D, id);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glBindTexture(GL_TEXTURE_2D, 0);
-}
-
-Texture::~Texture() {
-    glDeleteTextures(1, &m_id);
-}
-
-void* Texture::getIdPtr() const {
-    void* ptr;
-    std::memcpy(&ptr, &m_id, sizeof m_id);
-    return ptr;
+    m_id = id;
 }
 
 void Texture::load(int width, int height, void* pixels) {
-    glBindTexture(GL_TEXTURE_2D, m_id);
+    if (!m_id) create();
+    glBindTexture(GL_TEXTURE_2D, m_id.value());
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
     glBindTexture(GL_TEXTURE_2D, 0);
     m_width = width;
@@ -80,7 +89,7 @@ Napi::Value Texture::getTypeId(const Napi::CallbackInfo& info) {
 }
 
 Napi::Value Texture::toDebugString(const Napi::CallbackInfo& info) {
-    return fromStrUtf8(info.Env(), fmt::format("Texture (id={}; width={}; height={})", m_id, m_width, m_height));
+    return fromStrUtf8(info.Env(), fmt::format("Texture (id={}; width={}; height={})", m_id.value_or(0), m_width, m_height));
 }
 
 Napi::Value Texture::ref(const Napi::CallbackInfo& info) {

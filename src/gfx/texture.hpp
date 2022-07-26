@@ -1,5 +1,7 @@
 #pragma once
 
+#include <optional>
+
 #include <napi.h>
 
 namespace gfx {
@@ -18,7 +20,7 @@ public:
     }
 
     unsigned getId() const {
-        return m_id;
+        return m_id.value_or(0);
     }
 
     void* getIdPtr() const;
@@ -36,9 +38,10 @@ public:
 
 private:
     static Napi::FunctionReference m_ctor;
-    unsigned m_id;
+    std::optional<unsigned> m_id;
     int m_width{}, m_height{};
 
+    void create();
     void load(int width, int height, void* pixels);
 
     Napi::Value getTypeId(const Napi::CallbackInfo& info);
