@@ -1,6 +1,15 @@
+#include "core/type/convert.hpp"
 #include "gui/dialogs.hpp"
 #include "gui/gui.hpp"
 #include "gui/theme.hpp"
+
+#include <fmt/format.h>
+
+#ifdef _WIN32
+#include <Windows.h>
+#endif
+
+using namespace core::type::convert;
 
 namespace gui {
 
@@ -9,6 +18,17 @@ namespace theme { Napi::Value useImmersiveDarkMode(const Napi::CallbackInfo& inf
 #else
 namespace theme { Napi::Value getGtkTheme(const Napi::CallbackInfo& info); }
 #endif
+
+Napi::Value openUrl(const Napi::CallbackInfo& info) {
+    const auto url = asPath(info[0]);
+#ifdef _WIN32
+    if (ShellExecute(nullptr, nullptr, url.wstring().c_str(), nullptr, nullptr, SW_SHOW) <= (HINSTANCE)(INT_PTR)32)
+#else
+    if (std::system(fmt::format("xdg-open \"{}\"", url.string()).c_str()) != 0)
+#endif
+        throw Napi::Error::New(info.Env(), fmt::format("failed to open url `{}`", url.generic_string()));
+    return info.Env().Undefined();
+}
 
 Napi::Object initialize(Napi::Env env, Napi::Object exports) {
     using namespace dialogs;
@@ -28,6 +48,8 @@ Napi::Object initialize(Napi::Env env, Napi::Object exports) {
 #else
     exports.Set("getGtkTheme", Napi::Function::New(env, getGtkTheme));
 #endif
+
+    exports.Set("openUrl", Napi::Function::New(env, openUrl));
 
     return exports;
 }

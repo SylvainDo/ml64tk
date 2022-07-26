@@ -1602,6 +1602,8 @@ export module Gui {
 
     function getColorScheme(): ColorScheme;
     function getAccentColor(): Vec4;
+
+    function openUrl(url: string): void;
 }
 
 export module Gfx {
