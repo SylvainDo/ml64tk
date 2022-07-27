@@ -1488,8 +1488,8 @@ export module ImGui {
     function beginChildFrame(id: number, size: Vec2, flags?: WindowFlags): boolean;
     function endChildFrame(): void;
     function calcTextSize(text: string, hideTextAfterDoubleHash?: boolean, wrapWidth?: number): Vec2;
-    function colorConvertRGBtoHSV(rgb: Vec3): Vec3;
-    function colorConvertHSVtoRGB(hsv: Vec3): Vec3;
+    function colorConvertRGBtoHSV(rgb: Vec4): Vec4;
+    function colorConvertHSVtoRGB(hsv: Vec4): Vec4;
     function isKeyDown(key: Key): boolean;
     function isKeyPressed(key: Key, repeat?: boolean): boolean;
     function isKeyReleased(key: Key): boolean;

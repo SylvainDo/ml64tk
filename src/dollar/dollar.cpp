@@ -10,11 +10,15 @@ using namespace imgui;
 namespace dollar {
 
 Napi::Value xy(const Napi::CallbackInfo& info) {
+    if (info.Length() == 0) return fromVec2(info.Env(), {});
     return fromVec2(info.Env(), { asF32(info[0]), asF32(info[1]) });
 }
 
 Napi::Value xyz(const Napi::CallbackInfo& info) {
-    if (info.Length() == 3) {
+    if (info.Length() == 0) {
+        return fromVec3(info.Env(), {});
+    }
+    else if (info.Length() == 3) {
         return fromVec3(info.Env(), { asF32(info[0]), asF32(info[1]), asF32(info[2]) });
     }
     else {
@@ -24,7 +28,10 @@ Napi::Value xyz(const Napi::CallbackInfo& info) {
 }
 
 Napi::Value xyzw(const Napi::CallbackInfo& info) {
-    if (info.Length() == 4) {
+    if (info.Length() == 0) {
+        return fromVec4(info.Env(), {});
+    }
+    else if (info.Length() == 4) {
         return fromVec4(info.Env(), { asF32(info[0]), asF32(info[1]), asF32(info[2]), asF32(info[3]) });
     }
     else {
