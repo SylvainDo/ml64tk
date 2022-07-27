@@ -56,7 +56,8 @@ Napi::Value Font::getTypeId(const Napi::CallbackInfo& info) {
 }
 
 Napi::Value Font::toDebugString(const Napi::CallbackInfo& info) {
-    return fromStrUtf8(info.Env(), fmt::format("{}", fmt::ptr(m_val)));
+    return fromStrUtf8(info.Env(), fmt::format("ImGui.Font (this={}; instance={})",
+        fmt::ptr(this), fmt::ptr(m_val)));
 }
 
 Napi::Value Font::ref(const Napi::CallbackInfo& info) {

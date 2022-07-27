@@ -44,8 +44,9 @@ Napi::Value SoundBuffer::getTypeId(const Napi::CallbackInfo& info) {
 }
 
 Napi::Value SoundBuffer::toDebugString(const Napi::CallbackInfo& info) {
-    return fromStrUtf8(info.Env(), fmt::format("SoundBuffer (instance={}; sampleCount={}; sampleRate={} Hz; channelCount={}; duration={} ms)",
-        fmt::ptr(&m_inst), m_inst.getSampleCount(), m_inst.getSampleRate(), m_inst.getChannelCount(), m_inst.getDuration().asMilliseconds()));
+    return fromStrUtf8(info.Env(), fmt::format("Audio.SoundBuffer (this={}; instance={}; sampleCount={}; sampleRate={} Hz; channelCount={}; duration={} ms)",
+        fmt::ptr(this), fmt::ptr(&m_inst), m_inst.getSampleCount(), m_inst.getSampleRate(), m_inst.getChannelCount(),
+        m_inst.getDuration().asMilliseconds()));
 }
 
 Napi::Value SoundBuffer::ref(const Napi::CallbackInfo& info) {

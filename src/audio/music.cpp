@@ -56,11 +56,11 @@ Napi::Value Music::getTypeId(const Napi::CallbackInfo& info) {
 }
 
 Napi::Value Music::toDebugString(const Napi::CallbackInfo& info) {
-    return fromStrUtf8(info.Env(), fmt::format("Music (instance={}; pitch={}; volume={}; position=({},{},{}); relativeToListener={}; minDistance={}; attenuation={}; status={}; channelCount={}; sampleRate={} Hz; playingOffset={} ms; loop={}; duration={} ms; loopPoints=(offset={} ms; length={} ms))",
-        fmt::ptr(&m_inst), m_inst.getPitch(), m_inst.getVolume(), m_inst.getPosition().x, m_inst.getPosition().y, m_inst.getPosition().z,
-        m_inst.isRelativeToListener(), m_inst.getMinDistance(), m_inst.getAttenuation(), m_inst.getStatus(), m_inst.getChannelCount(),
-        m_inst.getSampleRate(), m_inst.getPlayingOffset().asMilliseconds(), m_inst.getLoop(), m_inst.getDuration().asMilliseconds(),
-        m_inst.getLoopPoints().offset.asMilliseconds(), m_inst.getLoopPoints().length.asMilliseconds()));
+    return fromStrUtf8(info.Env(), fmt::format("Audio.Music (this={}; instance={}; pitch={}; volume={}; position=({},{},{}); relativeToListener={}; minDistance={}; attenuation={}; status={}; channelCount={}; sampleRate={} Hz; playingOffset={} ms; loop={}; duration={} ms; loopPoints=(offset={} ms; length={} ms))",
+        fmt::ptr(this), fmt::ptr(&m_inst), m_inst.getPitch(), m_inst.getVolume(), m_inst.getPosition().x, m_inst.getPosition().y,
+        m_inst.getPosition().z, m_inst.isRelativeToListener(), m_inst.getMinDistance(), m_inst.getAttenuation(), m_inst.getStatus(),
+        m_inst.getChannelCount(), m_inst.getSampleRate(), m_inst.getPlayingOffset().asMilliseconds(), m_inst.getLoop(),
+        m_inst.getDuration().asMilliseconds(), m_inst.getLoopPoints().offset.asMilliseconds(), m_inst.getLoopPoints().length.asMilliseconds()));
 }
 
 Napi::Value Music::ref(const Napi::CallbackInfo& info) {

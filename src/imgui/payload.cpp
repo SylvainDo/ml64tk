@@ -47,7 +47,8 @@ Napi::Value Payload::getTypeId(const Napi::CallbackInfo& info) {
 }
 
 Napi::Value Payload::toDebugString(const Napi::CallbackInfo& info) {
-    return fromStrUtf8(info.Env(), fmt::format("{}", fmt::ptr(m_val)));
+    return fromStrUtf8(info.Env(), fmt::format("ImGui.Payload (this={}; instance={})",
+        fmt::ptr(this), fmt::ptr(m_val)));
 }
 
 Napi::Value Payload::ref(const Napi::CallbackInfo& info) {

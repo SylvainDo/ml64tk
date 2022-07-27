@@ -54,7 +54,8 @@ Napi::Value InputTextCallbackData::getTypeId(const Napi::CallbackInfo& info) {
 }
 
 Napi::Value InputTextCallbackData::toDebugString(const Napi::CallbackInfo& info) {
-    return fromStrUtf8(info.Env(), fmt::format("{}", fmt::ptr(m_val)));
+    return fromStrUtf8(info.Env(), fmt::format("ImGui.InputTextCallbackData (this={}; instance={})",
+        fmt::ptr(this), fmt::ptr(m_val)));
 }
 
 Napi::Value InputTextCallbackData::ref(const Napi::CallbackInfo& info) {

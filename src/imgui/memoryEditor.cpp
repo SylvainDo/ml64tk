@@ -55,7 +55,8 @@ Napi::Value MemoryEditor_::getTypeId(const Napi::CallbackInfo& info) {
 }
 
 Napi::Value MemoryEditor_::toDebugString(const Napi::CallbackInfo& info) {
-    return fromStrUtf8(info.Env(), fmt::format("MemoryEditor ()"));
+    return fromStrUtf8(info.Env(), fmt::format("ImGui.MemoryEditor (this={}; instance={})",
+        fmt::ptr(this), fmt::ptr(m_edit.get())));
 }
 
 Napi::Value MemoryEditor_::ref(const Napi::CallbackInfo& info) {

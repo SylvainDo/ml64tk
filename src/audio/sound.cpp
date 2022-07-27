@@ -51,9 +51,9 @@ Napi::Value Sound::getTypeId(const Napi::CallbackInfo& info) {
 }
 
 Napi::Value Sound::toDebugString(const Napi::CallbackInfo& info) {
-    return fromStrUtf8(info.Env(), fmt::format("Sound (instance={}; pitch={}; volume={}; position=({},{},{}); relativeToListener={}; minDistance={}; attenuation={}; status={}; buffer={}; loop={}; playingOffset={})",
-        fmt::ptr(&m_inst), m_inst.getPitch(), m_inst.getVolume(), m_inst.getPosition().x, m_inst.getPosition().y, m_inst.getPosition().z,
-        m_inst.isRelativeToListener(), m_inst.getMinDistance(), m_inst.getAttenuation(), m_inst.getStatus(),
+    return fromStrUtf8(info.Env(), fmt::format("Audio.Sound (this={}; instance={}; pitch={}; volume={}; position=({},{},{}); relativeToListener={}; minDistance={}; attenuation={}; status={}; buffer={}; loop={}; playingOffset={})",
+        fmt::ptr(this), fmt::ptr(&m_inst), m_inst.getPitch(), m_inst.getVolume(), m_inst.getPosition().x, m_inst.getPosition().y,
+        m_inst.getPosition().z, m_inst.isRelativeToListener(), m_inst.getMinDistance(), m_inst.getAttenuation(), m_inst.getStatus(),
         m_buf.IsEmpty() ? "undefined" : fmt::format("{}", fmt::ptr(SoundBuffer::get(m_buf.Value()))), m_inst.getLoop(),
         m_inst.getPlayingOffset().asMilliseconds()));
 }

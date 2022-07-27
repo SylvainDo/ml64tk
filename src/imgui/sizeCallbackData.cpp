@@ -45,7 +45,8 @@ Napi::Value SizeCallbackData::getTypeId(const Napi::CallbackInfo& info) {
 }
 
 Napi::Value SizeCallbackData::toDebugString(const Napi::CallbackInfo& info) {
-    return fromStrUtf8(info.Env(), fmt::format("{}", fmt::ptr(m_val)));
+    return fromStrUtf8(info.Env(), fmt::format("ImGui.SizeCallbackData (this={}; instance={})",
+        fmt::ptr(this), fmt::ptr(m_val)));
 }
 
 Napi::Value SizeCallbackData::ref(const Napi::CallbackInfo& info) {

@@ -145,12 +145,12 @@ private:
 
     Napi::Value toDebugString(const Napi::CallbackInfo& info) {
         if constexpr (Signed) {
-            return fromStrUtf8(info.Env(), fmt::sprintf("SignedLargeInteger (value=%d; quadPart=%#x; lowPart=%#x; highPart=%#x)",
-                value.quadPart, value.quadPart, value.u.lowPart, value.u.highPart));
+            return fromStrUtf8(info.Env(), fmt::sprintf("Core.SignedLargeInteger (this=%p; value=%d; quadPart=%#x; lowPart=%#x; highPart=%#x)",
+                fmt::ptr(this), value.quadPart, value.quadPart, value.u.lowPart, value.u.highPart));
         }
         else {
-            return fromStrUtf8(info.Env(), fmt::sprintf("UnsignedLargeInteger (value=%u; quadPart=%#x; lowPart=%#x; highPart=%#x)",
-                value.quadPart, value.quadPart, value.u.lowPart, value.u.highPart));
+            return fromStrUtf8(info.Env(), fmt::sprintf("Core.UnsignedLargeInteger (this=%p; value=%u; quadPart=%#x; lowPart=%#x; highPart=%#x)",
+                fmt::ptr(this), value.quadPart, value.quadPart, value.u.lowPart, value.u.highPart));
         }
     }
 

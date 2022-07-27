@@ -54,7 +54,8 @@ Napi::Value FontAtlas::getTypeId(const Napi::CallbackInfo& info) {
 }
 
 Napi::Value FontAtlas::toDebugString(const Napi::CallbackInfo& info) {
-    return fromStrUtf8(info.Env(), fmt::format("{}", fmt::ptr(m_val)));
+    return fromStrUtf8(info.Env(), fmt::format("ImGui.FontAtlas (this={}; instance={})",
+        fmt::ptr(this), fmt::ptr(m_val)));
 }
 
 Napi::Value FontAtlas::ref(const Napi::CallbackInfo& info) {

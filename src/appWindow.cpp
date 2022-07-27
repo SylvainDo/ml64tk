@@ -45,11 +45,7 @@ Napi::Object AppWindow::initialize(Napi::Env env, Napi::Object exports) {
     return exports;
 }
 
-AppWindow::AppWindow(const Napi::CallbackInfo& info) :
-    Napi::ObjectWrap<AppWindow>{ info },
-    m_window{ nullptr, SDL_DestroyWindow },
-    m_glContext{ nullptr, SDL_GL_DeleteContext },
-    m_icon{ nullptr, SDL_FreeSurface } {
+AppWindow::AppWindow(const Napi::CallbackInfo& info) : Napi::ObjectWrap<AppWindow>{ info } {
     const auto vsync = asBoolOr(info[0], false);
     const auto viewports = asBoolOr(info[1], true);
 
@@ -200,8 +196,14 @@ Napi::Value AppWindow::getTypeId(const Napi::CallbackInfo& info) {
     return fromTypeId<AppWindow>(info.Env());
 }
 
+inline std::string formatColor(const ImColor& v) {
+    return fmt::format("({},{},{},{})", v.Value.x, v.Value.y, v.Value.z, v.Value.w);
+}
+
 Napi::Value AppWindow::toDebugString(const Napi::CallbackInfo& info) {
-    return fromStrUtf8(info.Env(), fmt::format("null"));
+    return fromStrUtf8(info.Env(), fmt::format("AppWindow (this={}; threadId={}; window={}; glContext={}; icon={}; imguiContext={}; clearColor={} inited={}; done={})",
+        fmt::ptr(this), std::hash<std::thread::id>()(m_threadId), fmt::ptr(m_window.get()), fmt::ptr(m_glContext.get()),
+        fmt::ptr(m_icon.get()), fmt::ptr(m_imguiContext), formatColor(m_clearColor), m_inited, m_done));
 }
 
 Napi::Value AppWindow::ref(const Napi::CallbackInfo& info) {

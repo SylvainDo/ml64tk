@@ -60,7 +60,8 @@ Napi::Value OpaquePointer::getTypeId(const Napi::CallbackInfo& info) {
 }
 
 Napi::Value OpaquePointer::toDebugString(const Napi::CallbackInfo& info) {
-    return fromStrUtf8(info.Env(), fmt::format("{}", fmt::ptr(m_val)));
+    return fromStrUtf8(info.Env(), fmt::format("Core.OpaquePointer (this={}; ptr={}; type={})",
+        fmt::ptr(this), fmt::ptr(m_val), static_cast<int>(m_type)));
 }
 
 Napi::Value OpaquePointer::ref(const Napi::CallbackInfo& info) {

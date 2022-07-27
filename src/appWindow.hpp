@@ -45,9 +45,9 @@ private:
     static Napi::FunctionReference m_ctor;
     static AppWindow* m_instance;
     std::thread::id m_threadId;
-    std::unique_ptr<SDL_Window, decltype(&SDL_DestroyWindow)> m_window;
-    std::unique_ptr<void, decltype(&SDL_GL_DeleteContext)> m_glContext;
-    std::unique_ptr<SDL_Surface, decltype(&SDL_FreeSurface)> m_icon;
+    std::unique_ptr<SDL_Window, decltype(&SDL_DestroyWindow)> m_window{ nullptr, SDL_DestroyWindow };
+    std::unique_ptr<void, decltype(&SDL_GL_DeleteContext)> m_glContext{ nullptr, SDL_GL_DeleteContext };
+    std::unique_ptr<SDL_Surface, decltype(&SDL_FreeSurface)> m_icon{ nullptr, SDL_FreeSurface };
     ImGuiContext* m_imguiContext;
     imgui::IOUserData m_ioUserData;
     std::array<std::unique_ptr<Napi::FunctionReference>, Callback::NumCallbacks> m_callbacks;

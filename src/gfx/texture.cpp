@@ -88,7 +88,8 @@ Napi::Value Texture::getTypeId(const Napi::CallbackInfo& info) {
 }
 
 Napi::Value Texture::toDebugString(const Napi::CallbackInfo& info) {
-    return fromStrUtf8(info.Env(), fmt::format("Texture (id={}; width={}; height={})", m_id.value_or(0), m_width, m_height));
+    return fromStrUtf8(info.Env(), fmt::format("Gfx.Texture (this={}; id={}; width={}; height={})",
+        fmt::ptr(this), m_id.value_or(0), m_width, m_height));
 }
 
 Napi::Value Texture::ref(const Napi::CallbackInfo& info) {

@@ -47,8 +47,8 @@ inline std::string formatColor(const ImColor& v) {
 }
 
 Napi::Value Font::toDebugString(const Napi::CallbackInfo& info) {
-    return fromStrUtf8(info.Env(), fmt::format("Font (font={}; fillColor={}; outlineColor={}; outlineThickness={})",
-        fmt::ptr(m_font.get()), formatColor(m_fillColor), formatColor(m_outlineColor), m_outlineThickness));
+    return fromStrUtf8(info.Env(), fmt::format("Gfx.Font (this={}; font={}; fillColor={}; outlineColor={}; outlineThickness={})",
+        fmt::ptr(this), fmt::ptr(m_font.get()), formatColor(m_fillColor), formatColor(m_outlineColor), m_outlineThickness));
 }
 
 Napi::Value Font::ref(const Napi::CallbackInfo& info) {
