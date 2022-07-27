@@ -35,7 +35,7 @@ inline std::string formatVec3(const sf::Vector3f& v) {
 }
 
 Napi::Value Listener::toDebugString(const Napi::CallbackInfo& info) {
-    return fromStrUtf8(info.Env(), fmt::format("Listener (globalVolume={}; position={}; direction={}; upVector={})",
+    return fromStrUtf8(info.Env(), fmt::format("Audio.Listener (globalVolume={}; position={}; direction={}; upVector={})",
         sf::Listener::getGlobalVolume(), formatVec3(sf::Listener::getPosition()),
         formatVec3(sf::Listener::getDirection()), formatVec3(sf::Listener::getUpVector())));
 }
