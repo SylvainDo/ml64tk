@@ -9,6 +9,7 @@
 
 #include <fmt/format.h>
 #include <imgui.h>
+#include <SDL_events.h>
 #include <SDL_video.h>
 
 #include <shlobj_core.h>
@@ -205,6 +206,9 @@ Napi::Value execFileDialog(const Napi::CallbackInfo& info, const CLSID& clsid, c
     }
     diag.show();
 
+    SDL_Event e;
+    while (SDL_PollEvent(&e));
+
     if constexpr (PickFolder && MultiSelect) return diag.getResultFolders();
     else if constexpr (PickFolder) return diag.getResultFolder();
     else if constexpr (MultiSelect) return diag.getResultFiles();
@@ -287,6 +291,10 @@ Napi::Value showMessageBox(const Napi::CallbackInfo& info) {
         buttons.has_value() ? buttons.value() : 0,
         type.has_value() ? type.value() : 0,
         &response);
+
+    SDL_Event e;
+    while (SDL_PollEvent(&e));
+
     return fromS32(info.Env(), static_cast<int>(convertResponse(response)));
 }
 
