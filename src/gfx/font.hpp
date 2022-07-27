@@ -27,7 +27,7 @@ private:
     static Napi::FunctionReference m_ctor;
     std::unique_ptr<TTF_Font, decltype(&TTF_CloseFont)> m_font{ nullptr, TTF_CloseFont };
     ImColor m_fillColor{ IM_COL32_WHITE };
-    ImColor m_outlineColor{ IM_COL32_BLACK };
+    ImColor m_outlineColor{ IM_COL32_WHITE };
     int m_outlineThickness{};
 
     Napi::Value getTypeId(const Napi::CallbackInfo& info);
