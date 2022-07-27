@@ -1695,7 +1695,7 @@ Napi::Value beginDragDropSource(const Napi::CallbackInfo& info) {
 }
 
 Napi::Value setDragDropPayload(const Napi::CallbackInfo& info) {
-    auto data = info[1].As<Napi::ArrayBuffer>();
+    auto data = info[1].As<Napi::Uint8Array>();
     return fromBool(info.Env(), ImGui::SetDragDropPayload(
         /* type */ asStrUtf8(info[0]).c_str(),
         /* data */ data.Data(),

@@ -1115,7 +1115,7 @@ export module ImGui {
         equals(other: FontAtlas): boolean;
         addFontDefault(cfg?: FontConfig): Font;
         addFontFromFile(filename: string, sizePixels: number, cfg?: FontConfig, glyphRanges?: Uint16Array): Font;
-        addFontFromMemory(data: ArrayBuffer, sizePixels: number, cfg?: FontConfig, glyphRanges?: Uint16Array): Font;
+        addFontFromMemory(data: Uint8Array, sizePixels: number, cfg?: FontConfig, glyphRanges?: Uint16Array): Font;
         clear(): void;
         glyphRangesDefault: Uint16Array;
         glyphRangesKorean: Uint16Array;
@@ -1446,7 +1446,7 @@ export module ImGui {
     function logButtons(): void;
     function logText(text: string): void;
     function beginDragDropSource(flags?: DragDropFlags): boolean;
-    function setDragDropPayload(type: string, data: ArrayBuffer, cond?: Cond): boolean;
+    function setDragDropPayload(type: string, data: Uint8Array, cond?: Cond): boolean;
     function endDragDropSource(): void;
     function beginDragDropTarget(): boolean;
     function acceptDragDropPayload(type: string, flags?: DragDropFlags): Payload;
@@ -1642,7 +1642,7 @@ interface AppWindow {
     doIteration(): boolean;
     title: string;
     setIconFromFile(filename: string): void;
-    setIconFromMemory(data: ArrayBuffer): void;
+    setIconFromMemory(data: Uint8Array): void;
     size: Vec2;
     minimumSize: Vec2;
     maximumSize: Vec2;

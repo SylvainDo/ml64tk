@@ -246,7 +246,7 @@ Napi::Value AppWindow::setIconFromFile(const Napi::CallbackInfo& info) {
 }
 
 Napi::Value AppWindow::setIconFromMemory(const Napi::CallbackInfo& info) {
-    auto data = info[0].As<Napi::ArrayBuffer>();
+    auto data = info[0].As<Napi::Uint8Array>();
     m_icon.reset(IMG_Load_RW(SDL_RWFromMem(data.Data(), data.ByteLength()), true));
     if (!m_icon) throw Napi::Error::New(info.Env(), fmt::format("failed to load icon from memory: {}", IMG_GetError()));
     SDL_SetWindowIcon(m_window.get(), m_icon.get());

@@ -86,7 +86,7 @@ Napi::Value FontAtlas::addFontFromMemory(const Napi::CallbackInfo& info) {
     static ImFontConfig fontConfigDefault;
     auto fontConfig = info[2].IsUndefined() ? &fontConfigDefault : FontConfig::get(info[2]);
     fontConfig->FontDataOwnedByAtlas = false;
-    auto buf = info[0].As<Napi::ArrayBuffer>();
+    auto buf = info[0].As<Napi::Uint8Array>();
     return Font::create(info.Env(), m_val->AddFontFromMemoryTTF(
         /* font_data */ buf.Data(),
         /* font_size */ buf.ByteLength(),
