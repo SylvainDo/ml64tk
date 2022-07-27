@@ -1,10 +1,6 @@
 set(DIR "${CMAKE_SOURCE_DIR}/vendor/imgui-docking")
 set(CLUB_DIR "${CMAKE_SOURCE_DIR}/vendor/imgui_club")
 
-list(APPEND COMPILE_DEFS "IMGUI_DISABLE_OBSOLETE_FUNCTIONS")
-list(APPEND COMPILE_DEFS "IMGUI_DISABLE_OBSOLETE_KEYIO")
-list(APPEND COMPILE_DEFS "IMGUI_ENABLE_FREETYPE")
-
 list(APPEND INC_DIRS "${DIR}")
 list(APPEND INC_DIRS "${DIR}/backends")
 list(APPEND INC_DIRS "${DIR}/misc/cpp")
@@ -35,10 +31,11 @@ set(SRC
 
 add_library(imgui INTERFACE IMPORTED)
 set_target_properties(imgui PROPERTIES
-	INTERFACE_COMPILE_DEFINITIONS "${COMPILE_DEFS}"
 	INTERFACE_INCLUDE_DIRECTORIES "${INC_DIRS}"
 	INTERFACE_SOURCES "${SRC}")
 set_source_files_properties(${SRC} PROPERTIES SKIP_PRECOMPILE_HEADERS ON)
 
 find_package(freetype CONFIG REQUIRED)
 target_link_libraries(imgui INTERFACE freetype)
+
+file(COPY_FILE "${CMAKE_SOURCE_DIR}/cmake/imconfig.h" "${CMAKE_SOURCE_DIR}/vendor/imgui-docking/imconfig.h")
