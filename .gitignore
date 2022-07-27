@@ -9,7 +9,7 @@
 /out
 /test/assets
 /test/bin
-/test/imgui.ini
+/test/*.ini
 /winrt-theming/.vs
 /winrt-theming/packages
 /winrt-theming/x64
