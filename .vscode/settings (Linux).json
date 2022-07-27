@@ -1,10 +1,10 @@
 {
     "cmake.configureSettings": {
         "CMAKE_BUILD_TYPE": "${buildType}",
-        "CMAKE_TOOLCHAIN_FILE": "/path/to/dev/vcpkg/scripts/buildsystems/vcpkg.cmake",
-        "VCPKG_DIR": "/path/to/dev/vcpkg",
+        "CMAKE_TOOLCHAIN_FILE": "/path/to/dev/modloader64/ml64tk-vcpkg/scripts/buildsystems/vcpkg.cmake",
+        "VCPKG_DIR": "/path/to/dev/modloader64/ml64tk-vcpkg",
         "VCPKG_TARGET_TRIPLET": "x64-linux",
-        "NODE_DEV_DIR": "/path/to/dev/nodejs-addon-sdk/node-v16.15.1",
-        "NODE_ADDON_DEV_DIR": "/path/to/dev/nodejs-addon-sdk/node-addon-api-5.0.0"
+        "NODE_DEV_DIR": "/path/to/dev/nodejs-lts/nodejs-addon-sdk/node-v16.16.0",
+        "NODE_ADDON_DEV_DIR": "/path/to/dev/nodejs-lts/nodejs-addon-sdk/node-addon-api-5.0.0"
     }
 }
