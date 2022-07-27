@@ -58,6 +58,7 @@ private:
     void doFrame();
     void call(Callback callback, const std::initializer_list<napi_value>& args = {});
     static int eventWatch(void* userdata, SDL_Event* event);
+    void closeReal();
 
     static Napi::Value getTicks(const Napi::CallbackInfo& info);
 
@@ -69,6 +70,7 @@ private:
     Napi::Value equals(const Napi::CallbackInfo& info);
     Napi::Value on(const Napi::CallbackInfo& info);
     Napi::Value doIteration(const Napi::CallbackInfo& info);
+    Napi::Value close(const Napi::CallbackInfo& info);
     Napi::Value getTitle(const Napi::CallbackInfo& info);
     void setTitle(const Napi::CallbackInfo&, const Napi::Value& val);
     Napi::Value setIconFromFile(const Napi::CallbackInfo& info);

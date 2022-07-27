@@ -1643,6 +1643,7 @@ interface AppWindow {
     equals(other: AppWindow): boolean;
     on(name: AppCallbackName, callback?: AppCallbackVoid | AppCallbackDropFile): void;
     doIteration(): boolean;
+    close(): void;
     title: string;
     setIconFromFile(filename: string): void;
     setIconFromMemory(data: Uint8Array): void;

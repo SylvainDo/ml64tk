@@ -28,6 +28,7 @@ Napi::Object AppWindow::initialize(Napi::Env env, Napi::Object exports) {
         InstanceMethod<&AppWindow::equals>("equals"),
         InstanceMethod<&AppWindow::on>("on"),
         InstanceMethod<&AppWindow::doIteration>("doIteration"),
+        InstanceMethod<&AppWindow::close>("close"),
         InstanceAccessor<&AppWindow::getTitle, &AppWindow::setTitle>("title"),
         InstanceMethod<&AppWindow::setIconFromFile>("setIconFromFile"),
         InstanceMethod<&AppWindow::setIconFromMemory>("setIconFromMemory"),
@@ -132,8 +133,7 @@ void AppWindow::doStep(Napi::Env env) {
         if (e.type == SDL_QUIT
             || (e.type == SDL_WINDOWEVENT && e.window.event == SDL_WINDOWEVENT_CLOSE
                 && e.window.windowID == SDL_GetWindowID(m_window.get()))) {
-            SDL_HideWindow(m_window.get());
-            m_done = true;
+            closeReal();
         }
         else if (e.type == SDL_DROPFILE) {
             const std::unique_ptr<char, decltype(&SDL_free)> file{ e.drop.file, SDL_free };
@@ -187,6 +187,11 @@ int AppWindow::eventWatch(void* userdata, SDL_Event* event) {
     return 0;
 }
 
+void AppWindow::closeReal() {
+    SDL_HideWindow(m_window.get());
+    m_done = true;
+}
+
 Napi::Value AppWindow::getTicks(const Napi::CallbackInfo& info) {
     return fromF64(info.Env(), static_cast<double>(SDL_GetTicks64()));
 }
@@ -230,6 +235,11 @@ Napi::Value AppWindow::on(const Napi::CallbackInfo& info) {
 Napi::Value AppWindow::doIteration(const Napi::CallbackInfo& info) {
     if (!m_done) doStep(info.Env());
     return fromBool(info.Env(), m_done);
+}
+
+Napi::Value AppWindow::close(const Napi::CallbackInfo& info) {
+    closeReal();
+    return info.Env().Undefined();
 }
 
 Napi::Value AppWindow::getTitle(const Napi::CallbackInfo& info) {
