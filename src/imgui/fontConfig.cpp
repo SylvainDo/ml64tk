@@ -1,10 +1,10 @@
-#include "core/type/instanceOf.hpp"
+#include "core/instanceOf.hpp"
 #include "imgui/convert.hpp"
 #include "imgui/fontConfig.hpp"
 
 #include <fmt/format.h>
 
-using namespace core::type::convert;
+using namespace core;
 
 namespace imgui {
 
@@ -48,7 +48,7 @@ Napi::Object FontConfig::create(Napi::Env) {
 FontConfig::FontConfig(const Napi::CallbackInfo& info) : Napi::ObjectWrap<FontConfig>{ info } {}
 
 Napi::Value FontConfig::getTypeId(const Napi::CallbackInfo& info) {
-    return core::type::fromTypeId<FontConfig>(info.Env());
+    return fromTypeId<FontConfig>(info.Env());
 }
 
 Napi::Value FontConfig::toDebugString(const Napi::CallbackInfo& info) {

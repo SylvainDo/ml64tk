@@ -1,10 +1,10 @@
-#include "core/type/instanceOf.hpp"
+#include "core/instanceOf.hpp"
 #include "imgui/inputTextCallbackData.hpp"
 
 #include <fmt/format.h>
 #include <imgui.h>
 
-using namespace core::type::convert;
+using namespace core;
 
 namespace imgui {
 
@@ -50,7 +50,7 @@ Napi::Object InputTextCallbackData::create(Napi::Env, ImGuiInputTextCallbackData
 InputTextCallbackData::InputTextCallbackData(const Napi::CallbackInfo& info) : Napi::ObjectWrap<InputTextCallbackData>{ info } {}
 
 Napi::Value InputTextCallbackData::getTypeId(const Napi::CallbackInfo& info) {
-    return core::type::fromTypeId<InputTextCallbackData>(info.Env());
+    return fromTypeId<InputTextCallbackData>(info.Env());
 }
 
 Napi::Value InputTextCallbackData::toDebugString(const Napi::CallbackInfo& info) {

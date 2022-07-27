@@ -1,10 +1,10 @@
 #include "audio/convert.hpp"
 #include "audio/soundBuffer.hpp"
-#include "core/type/instanceOf.hpp"
+#include "core/instanceOf.hpp"
 
 #include <fmt/format.h>
 
-using namespace core::type::convert;
+using namespace core;
 
 namespace audio {
 
@@ -40,7 +40,7 @@ Napi::Object SoundBuffer::initialize(Napi::Env env, Napi::Object exports) {
 SoundBuffer::SoundBuffer(const Napi::CallbackInfo& info) : Napi::ObjectWrap<SoundBuffer>{ info } {}
 
 Napi::Value SoundBuffer::getTypeId(const Napi::CallbackInfo& info) {
-    return core::type::fromTypeId<SoundBuffer>(info.Env());
+    return fromTypeId<SoundBuffer>(info.Env());
 }
 
 Napi::Value SoundBuffer::toDebugString(const Napi::CallbackInfo& info) {

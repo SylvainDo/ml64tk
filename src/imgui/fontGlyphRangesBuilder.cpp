@@ -1,9 +1,9 @@
-#include "core/type/instanceOf.hpp"
+#include "core/instanceOf.hpp"
 #include "imgui/fontGlyphRangesBuilder.hpp"
 
 #include <fmt/format.h>
 
-using namespace core::type::convert;
+using namespace core;
 
 namespace imgui {
 
@@ -41,7 +41,7 @@ Napi::Object FontGlyphRangesBuilder::create(Napi::Env) {
 FontGlyphRangesBuilder::FontGlyphRangesBuilder(const Napi::CallbackInfo& info) : Napi::ObjectWrap<FontGlyphRangesBuilder>{ info } {}
 
 Napi::Value FontGlyphRangesBuilder::getTypeId(const Napi::CallbackInfo& info) {
-    return core::type::fromTypeId<FontGlyphRangesBuilder>(info.Env());
+    return fromTypeId<FontGlyphRangesBuilder>(info.Env());
 }
 
 Napi::Value FontGlyphRangesBuilder::toDebugString(const Napi::CallbackInfo& info) {

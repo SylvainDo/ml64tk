@@ -1,7 +1,7 @@
 #pragma once
 
-#include "core/type/convert.hpp"
-#include "core/type/instanceOf.hpp"
+#include "core/convert.hpp"
+#include "core/instanceOf.hpp"
 
 #include <bit>
 #include <bitset>
@@ -122,7 +122,6 @@ public:
     }
 
     static LargeInteger* unwrap(const Napi::Value& val) {
-        using namespace core::type::convert;
         return LargeInteger::Unwrap(valueAsObject(val));
     }
 
@@ -141,11 +140,10 @@ public:
 
 private:
     Napi::Value getTypeId(const Napi::CallbackInfo& info) {
-        return core::type::fromTypeId<LargeInteger>(info.Env());
+        return fromTypeId<LargeInteger>(info.Env());
     }
 
     Napi::Value toDebugString(const Napi::CallbackInfo& info) {
-        using namespace core::type::convert;
         if constexpr (Signed) {
             return fromStrUtf8(info.Env(), fmt::sprintf("SignedLargeInteger (value=%d; quadPart=%#x; lowPart=%#x; highPart=%#x)",
                 value.quadPart, value.quadPart, value.u.lowPart, value.u.highPart));
@@ -157,25 +155,20 @@ private:
     }
 
     Napi::Value ref(const Napi::CallbackInfo& info) {
-        using namespace core::type::convert;
         using ObjectWrap_t = Napi::ObjectWrap<LargeInteger<Signed>>;
         return fromU32(info.Env(), ObjectWrap_t::Ref());
     }
 
     Napi::Value unref(const Napi::CallbackInfo& info) {
-        using namespace core::type::convert;
         using ObjectWrap_t = Napi::ObjectWrap<LargeInteger<Signed>>;
         return fromU32(info.Env(), ObjectWrap_t::Unref());
     }
 
     Napi::Value toNumber(const Napi::CallbackInfo& info) {
-        using namespace core::type::convert;
         return fromF64(info.Env(), static_cast<double>(value.quadPart));
     }
 
     Napi::Value toString(const Napi::CallbackInfo& info) {
-        using namespace core::type::convert;
-
         if (info.Length() == 0) {
             return fromStrUtf8(info.Env(), std::to_string(value.quadPart));
         }
@@ -206,29 +199,24 @@ private:
     }
 
     Napi::Value toBigInt(const Napi::CallbackInfo& info) {
-        using namespace core::type::convert;
         if constexpr (Signed) return fromS64(info.Env(), value.u.highPart);
         else return fromU64(info.Env(), value.u.highPart);
     }
 
     Napi::Value getLowPart(const Napi::CallbackInfo& info) {
-        using namespace core::type::convert;
         return fromU32(info.Env(), value.u.lowPart);
     }
 
     void setLowPart(const Napi::CallbackInfo&, const Napi::Value& value) {
-        using namespace core::type::convert;
         this->value.u.lowPart = asU32(value);
     }
 
     Napi::Value getHighPart(const Napi::CallbackInfo& info) {
-        using namespace core::type::convert;
         if constexpr (Signed) return fromS32(info.Env(), value.u.highPart);
         else return fromU32(info.Env(), value.u.highPart);
     }
 
     void setHighPart(const Napi::CallbackInfo&, const Napi::Value& value) {
-        using namespace core::type::convert;
         if constexpr (Signed) this->value.u.highPart = asS32(value);
         else this->value.u.highPart = asU32(value);
     }
@@ -298,52 +286,42 @@ private:
     }
 
     Napi::Value shl(const Napi::CallbackInfo& info) {
-        using namespace core::type::convert;
         auto newValue = value;
         newValue.quadPart <<= asS32(info[0]);
         return create(info.Env(), newValue);
     }
 
     Napi::Value shr(const Napi::CallbackInfo& info) {
-        using namespace core::type::convert;
         auto newValue = value;
         newValue.quadPart >>= asS32(info[0]);
         return create(info.Env(), newValue);
     }
 
     Napi::Value eq(const Napi::CallbackInfo& info) {
-        using namespace core::type::convert;
         return fromBool(info.Env(), value.quadPart == valueFrom(info[0]).quadPart);
     }
 
     Napi::Value neq(const Napi::CallbackInfo& info) {
-        using namespace core::type::convert;
         return fromBool(info.Env(), value.quadPart != valueFrom(info[0]).quadPart);
     }
 
     Napi::Value lt(const Napi::CallbackInfo& info) {
-        using namespace core::type::convert;
         return fromBool(info.Env(), value.quadPart < valueFrom(info[0]).quadPart);
     }
 
     Napi::Value lte(const Napi::CallbackInfo& info) {
-        using namespace core::type::convert;
         return fromBool(info.Env(), value.quadPart <= valueFrom(info[0]).quadPart);
     }
 
     Napi::Value gt(const Napi::CallbackInfo& info) {
-        using namespace core::type::convert;
         return fromBool(info.Env(), value.quadPart > valueFrom(info[0]).quadPart);
     }
 
     Napi::Value gte(const Napi::CallbackInfo& info) {
-        using namespace core::type::convert;
         return fromBool(info.Env(), value.quadPart >= valueFrom(info[0]).quadPart);
     }
 
     Napi::Value bswap(const Napi::CallbackInfo& info) {
-        using namespace core::type::convert;
-
         auto newValue = value;
 
         if (info.Length() == 0) {
@@ -382,13 +360,10 @@ private:
     }
 
     Napi::Value bwidth(const Napi::CallbackInfo& info) {
-        using namespace core::type::convert;
         return fromS32(info.Env(), std::bit_width(static_cast<std::uint64_t>(value.quadPart)));
     }
 
     Napi::Value rotl(const Napi::CallbackInfo& info) {
-        using namespace core::type::convert;
-
         auto newValue = value;
         const auto shift = asS32(info[0]);
 
@@ -418,8 +393,6 @@ private:
     }
 
     Napi::Value rotr(const Napi::CallbackInfo& info) {
-        using namespace core::type::convert;
-
         auto newValue = value;
         const auto shift = asS32(info[0]);
 
@@ -449,33 +422,26 @@ private:
     }
 
     Napi::Value countlZero(const Napi::CallbackInfo& info) {
-        using namespace core::type::convert;
         return fromS32(info.Env(), std::countl_zero(static_cast<std::uint64_t>(value.quadPart)));
     }
 
     Napi::Value countlOne(const Napi::CallbackInfo& info) {
-        using namespace core::type::convert;
         return fromS32(info.Env(), std::countl_one(static_cast<std::uint64_t>(value.quadPart)));
     }
 
     Napi::Value countrZero(const Napi::CallbackInfo& info) {
-        using namespace core::type::convert;
         return fromS32(info.Env(), std::countr_zero(static_cast<std::uint64_t>(value.quadPart)));
     }
 
     Napi::Value countrOne(const Napi::CallbackInfo& info) {
-        using namespace core::type::convert;
         return fromS32(info.Env(), std::countr_one(static_cast<std::uint64_t>(value.quadPart)));
     }
 
     Napi::Value popCount(const Napi::CallbackInfo& info) {
-        using namespace core::type::convert;
         return fromS32(info.Env(), std::popcount(static_cast<std::uint64_t>(value.quadPart)));
     }
 
     static ValueType valueFromString(const Napi::Value& val, int base) {
-        using namespace core::type::convert;
-
         ValueType newValue{};
         const auto str = asStrUtf8(val);
 
@@ -492,9 +458,6 @@ private:
     }
 
     static ValueType valueFrom(const Napi::Value& val) {
-        using namespace core::type;
-        using namespace core::type::convert;
-
         ValueType newValue{};
 
         if (isInstanceOf<SignedLargeInteger>(val)) {

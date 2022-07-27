@@ -1,10 +1,10 @@
-#include "core/type/instanceOf.hpp"
+#include "core/instanceOf.hpp"
 #include "imgui/windowClass.hpp"
 
 #include <fmt/format.h>
 #include <imgui.h>
 
-using namespace core::type::convert;
+using namespace core;
 
 namespace imgui {
 
@@ -54,7 +54,7 @@ WindowClass::~WindowClass() {
 }
 
 Napi::Value WindowClass::getTypeId(const Napi::CallbackInfo& info) {
-    return core::type::fromTypeId<WindowClass>(info.Env());
+    return fromTypeId<WindowClass>(info.Env());
 }
 
 Napi::Value WindowClass::toDebugString(const Napi::CallbackInfo& info) {

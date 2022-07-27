@@ -1,11 +1,11 @@
-#include "core/type/instanceOf.hpp"
+#include "core/instanceOf.hpp"
 #include "gfx/font.hpp"
 #include "gfx/texture.hpp"
 #include "imgui/convert.hpp"
 
 #include <fmt/format.h>
 
-using namespace core::type::convert;
+using namespace core;
 using namespace imgui;
 
 namespace gfx {
@@ -39,7 +39,7 @@ Napi::Object Font::initialize(Napi::Env env, Napi::Object exports) {
 Font::Font(const Napi::CallbackInfo& info) : Napi::ObjectWrap<Font>{ info } {}
 
 Napi::Value Font::getTypeId(const Napi::CallbackInfo& info) {
-    return core::type::fromTypeId<Font>(info.Env());
+    return fromTypeId<Font>(info.Env());
 }
 
 inline std::string formatColor(const ImColor& v) {

@@ -1,11 +1,11 @@
-#include "core/type/instanceOf.hpp"
+#include "core/instanceOf.hpp"
 #include "imgui/convert.hpp"
 #include "imgui/style.hpp"
 
 #include <fmt/format.h>
 #include <imgui.h>
 
-using namespace core::type::convert;
+using namespace core;
 
 namespace imgui {
 
@@ -90,7 +90,7 @@ Style::~Style() {
 }
 
 Napi::Value Style::getTypeId(const Napi::CallbackInfo& info) {
-    return core::type::fromTypeId<Style>(info.Env());
+    return fromTypeId<Style>(info.Env());
 }
 
 Napi::Value Style::toDebugString(const Napi::CallbackInfo& info) {

@@ -1,4 +1,4 @@
-#include "core/type/instanceOf.hpp"
+#include "core/instanceOf.hpp"
 #include "core/opaquePointer.hpp"
 #include "imgui/payload.hpp"
 
@@ -6,7 +6,6 @@
 #include <imgui.h>
 
 using namespace core;
-using namespace core::type::convert;
 
 namespace imgui {
 
@@ -44,7 +43,7 @@ Napi::Object Payload::create(Napi::Env, ImGuiPayload* val) {
 Payload::Payload(const Napi::CallbackInfo& info) : Napi::ObjectWrap<Payload>{ info } {}
 
 Napi::Value Payload::getTypeId(const Napi::CallbackInfo& info) {
-    return core::type::fromTypeId<Payload>(info.Env());
+    return fromTypeId<Payload>(info.Env());
 }
 
 Napi::Value Payload::toDebugString(const Napi::CallbackInfo& info) {

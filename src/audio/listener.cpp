@@ -4,7 +4,7 @@
 #include <fmt/format.h>
 #include <SFML/Audio/Listener.hpp>
 
-using namespace core::type::convert;
+using namespace core;
 
 namespace audio {
 

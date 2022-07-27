@@ -1,11 +1,11 @@
-#include "core/type/instanceOf.hpp"
+#include "core/instanceOf.hpp"
 #include "imgui/convert.hpp"
 #include "imgui/sizeCallbackData.hpp"
 
 #include <fmt/format.h>
 #include <imgui.h>
 
-using namespace core::type::convert;
+using namespace core;
 
 namespace imgui {
 
@@ -41,7 +41,7 @@ Napi::Object SizeCallbackData::create(Napi::Env, ImGuiSizeCallbackData* val) {
 SizeCallbackData::SizeCallbackData(const Napi::CallbackInfo& info) : Napi::ObjectWrap<SizeCallbackData>{ info } {}
 
 Napi::Value SizeCallbackData::getTypeId(const Napi::CallbackInfo& info) {
-    return core::type::fromTypeId<SizeCallbackData>(info.Env());
+    return fromTypeId<SizeCallbackData>(info.Env());
 }
 
 Napi::Value SizeCallbackData::toDebugString(const Napi::CallbackInfo& info) {

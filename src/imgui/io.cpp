@@ -1,4 +1,4 @@
-#include "core/type/instanceOf.hpp"
+#include "core/instanceOf.hpp"
 #include "core/opaquePointer.hpp"
 #include "imgui/convert.hpp"
 #include "imgui/font.hpp"
@@ -11,7 +11,6 @@
 #include <imgui.h>
 
 using namespace core;
-using namespace core::type::convert;
 
 namespace imgui {
 
@@ -156,7 +155,7 @@ Napi::Object IO::create(Napi::Env, ImGuiIO* val) {
 IO::IO(const Napi::CallbackInfo& info) : Napi::ObjectWrap<IO>{ info } {}
 
 Napi::Value IO::getTypeId(const Napi::CallbackInfo& info) {
-    return core::type::fromTypeId<IO>(info.Env());
+    return fromTypeId<IO>(info.Env());
 }
 
 Napi::Value IO::toDebugString(const Napi::CallbackInfo& info) {

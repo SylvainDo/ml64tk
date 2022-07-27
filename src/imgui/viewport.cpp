@@ -1,4 +1,4 @@
-#include "core/type/instanceOf.hpp"
+#include "core/instanceOf.hpp"
 #include "core/opaquePointer.hpp"
 #include "imgui/convert.hpp"
 #include "imgui/viewport.hpp"
@@ -7,7 +7,6 @@
 #include <imgui.h>
 
 using namespace core;
-using namespace core::type::convert;
 
 namespace imgui {
 
@@ -52,7 +51,7 @@ Napi::Object Viewport::create(Napi::Env, ImGuiViewport* val) {
 Viewport::Viewport(const Napi::CallbackInfo& info) : Napi::ObjectWrap<Viewport>{ info } {}
 
 Napi::Value Viewport::getTypeId(const Napi::CallbackInfo& info) {
-    return core::type::fromTypeId<Viewport>(info.Env());
+    return fromTypeId<Viewport>(info.Env());
 }
 
 Napi::Value Viewport::toDebugString(const Napi::CallbackInfo& info) {

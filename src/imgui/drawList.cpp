@@ -1,4 +1,4 @@
-#include "core/type/instanceOf.hpp"
+#include "core/instanceOf.hpp"
 #include "core/opaquePointer.hpp"
 #include "gfx/texture.hpp"
 #include "imgui/convert.hpp"
@@ -14,7 +14,6 @@
 #include <SDL_render.h>
 
 using namespace core;
-using namespace core::type::convert;
 
 namespace imgui {
 
@@ -102,7 +101,7 @@ std::vector<ImVec2> DrawList::asPoints(const Napi::Value& val, ImVec2 origin) {
 }
 
 Napi::Value DrawList::getTypeId(const Napi::CallbackInfo& info) {
-    return type::fromTypeId<DrawList>(info.Env());
+    return fromTypeId<DrawList>(info.Env());
 }
 
 Napi::Value DrawList::toDebugString(const Napi::CallbackInfo& info) {
@@ -285,7 +284,7 @@ Napi::Value DrawList::addNgonFilled(const Napi::CallbackInfo& info) {
 }
 
 Napi::Value DrawList::addText(const Napi::CallbackInfo& info) {
-    if (type::isInstanceOf<Font>(info[0])) {
+    if (isInstanceOf<Font>(info[0])) {
         const auto cpuFineClipRect = info[6].IsUndefined() ? std::nullopt : std::optional{ asVec4(info[6]) };
         m_val->AddText(
             /* font */ Font::get(info[0]),

@@ -1,4 +1,4 @@
-#include "core/type/convert.hpp"
+#include "core/convert.hpp"
 #include "gui/dialogs.hpp"
 #include "gui/gui.hpp"
 #include "gui/theme.hpp"
@@ -9,7 +9,7 @@
 #include <Windows.h>
 #endif
 
-using namespace core::type::convert;
+using namespace core;
 
 namespace gui {
 

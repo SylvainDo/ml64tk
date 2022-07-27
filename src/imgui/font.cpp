@@ -1,4 +1,4 @@
-#include "core/type/instanceOf.hpp"
+#include "core/instanceOf.hpp"
 #include "imgui/convert.hpp"
 #include "imgui/drawList.hpp"
 #include "imgui/font.hpp"
@@ -7,7 +7,7 @@
 #include <fmt/format.h>
 #include <imgui.h>
 
-using namespace core::type::convert;
+using namespace core;
 
 namespace imgui {
 
@@ -52,7 +52,7 @@ Napi::Object Font::create(Napi::Env, ImFont* val) {
 Font::Font(const Napi::CallbackInfo& info) : Napi::ObjectWrap<Font>{ info } {}
 
 Napi::Value Font::getTypeId(const Napi::CallbackInfo& info) {
-    return core::type::fromTypeId<Font>(info.Env());
+    return fromTypeId<Font>(info.Env());
 }
 
 Napi::Value Font::toDebugString(const Napi::CallbackInfo& info) {

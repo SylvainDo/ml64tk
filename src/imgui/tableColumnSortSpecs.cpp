@@ -1,10 +1,10 @@
-#include "core/type/instanceOf.hpp"
+#include "core/instanceOf.hpp"
 #include "imgui/tableColumnSortSpecs.hpp"
 
 #include <fmt/format.h>
 #include <imgui.h>
 
-using namespace core::type::convert;
+using namespace core;
 
 namespace imgui {
 
@@ -41,7 +41,7 @@ Napi::Object TableColumnSortSpecs::create(Napi::Env, ImGuiTableColumnSortSpecs* 
 TableColumnSortSpecs::TableColumnSortSpecs(const Napi::CallbackInfo& info) : Napi::ObjectWrap<TableColumnSortSpecs>{ info } {}
 
 Napi::Value TableColumnSortSpecs::getTypeId(const Napi::CallbackInfo& info) {
-    return core::type::fromTypeId<TableColumnSortSpecs>(info.Env());
+    return fromTypeId<TableColumnSortSpecs>(info.Env());
 }
 
 Napi::Value TableColumnSortSpecs::toDebugString(const Napi::CallbackInfo& info) {

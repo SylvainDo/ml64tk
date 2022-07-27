@@ -1,4 +1,4 @@
-#include "core/type/convert.hpp"
+#include "core/convert.hpp"
 #include "gui/dialogs.hpp"
 #include "gui/gui.hpp"
 #include "imgui/viewport.hpp"
@@ -14,7 +14,7 @@
 #include <shlobj_core.h>
 #pragma comment(lib, "comctl32")
 
-using namespace core::type::convert;
+using namespace core;
 using namespace imgui;
 
 namespace gui::dialogs {

@@ -1,10 +1,10 @@
-#include "core/type/instanceOf.hpp"
+#include "core/instanceOf.hpp"
 #include "imgui/keyData.hpp"
 
 #include <fmt/format.h>
 #include <imgui.h>
 
-using namespace core::type::convert;
+using namespace core;
 
 namespace imgui {
 
@@ -41,7 +41,7 @@ Napi::Object KeyData::create(Napi::Env, ImGuiKeyData* val) {
 KeyData::KeyData(const Napi::CallbackInfo& info) : Napi::ObjectWrap<KeyData>{ info } {}
 
 Napi::Value KeyData::getTypeId(const Napi::CallbackInfo& info) {
-    return core::type::fromTypeId<KeyData>(info.Env());
+    return fromTypeId<KeyData>(info.Env());
 }
 
 Napi::Value KeyData::toDebugString(const Napi::CallbackInfo& info) {

@@ -1,9 +1,7 @@
-#include "core/type/instanceOf.hpp"
+#include "core/instanceOf.hpp"
 #include "core/opaquePointer.hpp"
 
 #include <fmt/format.h>
-
-using namespace core::type::convert;
 
 namespace core {
 
@@ -58,7 +56,7 @@ OpaquePointer::~OpaquePointer() {
 }
 
 Napi::Value OpaquePointer::getTypeId(const Napi::CallbackInfo& info) {
-    return core::type::fromTypeId<OpaquePointer>(info.Env());
+    return fromTypeId<OpaquePointer>(info.Env());
 }
 
 Napi::Value OpaquePointer::toDebugString(const Napi::CallbackInfo& info) {

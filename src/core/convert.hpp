@@ -7,7 +7,8 @@
 
 #include <napi.h>
 
-namespace core::type::convert {
+namespace core {
+inline namespace convert {
 
 inline Napi::Object valueAsObject(const Napi::Value& value) {
     return value.As<Napi::Object>();
@@ -256,4 +257,5 @@ inline Napi::Value fromSize(Napi::Env env, std::size_t size) {
     return fromU64(env, size);
 }
 
+}
 }

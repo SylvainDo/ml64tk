@@ -1,4 +1,4 @@
-#include "core/type/instanceOf.hpp"
+#include "core/instanceOf.hpp"
 #include "core/opaquePointer.hpp"
 #include "imgui/convert.hpp"
 #include "imgui/drawList.hpp"
@@ -26,7 +26,6 @@
 #include <imgui_stdlib.h>
 
 using namespace core;
-using namespace core::type::convert;
 
 namespace imgui {
 
@@ -642,7 +641,7 @@ Napi::Value getFrameHeightWithSpacing(const Napi::CallbackInfo& info) {
 Napi::Value pushId(const Napi::CallbackInfo& info) {
     if (info[0].IsString())
         ImGui::PushID(/* str_id */ asStrUtf8(info[0]).c_str());
-    else if (type::isInstanceOf<OpaquePointer>(info[0]))
+    else if (isInstanceOf<OpaquePointer>(info[0]))
         ImGui::PushID(/* ptr_id */ OpaquePointer::get(info[0]));
     else
         ImGui::PushID(/* int_id */ asS32(info[0]));
@@ -655,7 +654,7 @@ Napi::Value popId(const Napi::CallbackInfo& info) {
 }
 
 Napi::Value getId(const Napi::CallbackInfo& info) {
-    if (type::isInstanceOf<OpaquePointer>(info[0]))
+    if (isInstanceOf<OpaquePointer>(info[0]))
         return fromU32(info.Env(), ImGui::GetID(/* ptr_id */ OpaquePointer::get(info[0])));
     else
         return fromU32(info.Env(), ImGui::GetID(/* str_id */ asStrUtf8(info[0]).c_str()));

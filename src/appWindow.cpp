@@ -1,4 +1,4 @@
-#include "core/type/instanceOf.hpp"
+#include "core/instanceOf.hpp"
 #include "imgui/convert.hpp"
 #include "imgui/viewport.hpp"
 #include "appWindow.hpp"
@@ -10,7 +10,7 @@
 #include <SDL_image.h>
 #include <SDL_opengl.h>
 
-using namespace core::type::convert;
+using namespace core;
 
 Napi::FunctionReference AppWindow::m_ctor;
 AppWindow* AppWindow::m_instance;
@@ -189,7 +189,7 @@ Napi::Value AppWindow::getTicks(const Napi::CallbackInfo& info) {
 }
 
 Napi::Value AppWindow::getTypeId(const Napi::CallbackInfo& info) {
-    return core::type::fromTypeId<AppWindow>(info.Env());
+    return fromTypeId<AppWindow>(info.Env());
 }
 
 Napi::Value AppWindow::toDebugString(const Napi::CallbackInfo& info) {

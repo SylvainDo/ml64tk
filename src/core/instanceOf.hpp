@@ -1,14 +1,13 @@
 #pragma once
 
-#include "core/type/convert.hpp"
+#include "core/convert.hpp"
 
 #include <typeinfo>
 
-namespace core::type {
+namespace core {
 
 template <class T>
 bool isInstanceOf(const Napi::Value& value) {
-    using namespace convert;
     if (!value.IsObject()) return false;
     const auto obj = valueAsObject(value);
     if (!obj.Has("typeId")) return false;
@@ -17,7 +16,7 @@ bool isInstanceOf(const Napi::Value& value) {
 
 template <class T>
 Napi::Value fromTypeId(Napi::Env env) {
-    return convert::fromSize(env, typeid(T).hash_code());
+    return fromSize(env, typeid(T).hash_code());
 }
 
 }

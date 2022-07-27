@@ -7,7 +7,6 @@
 #include <imgui_memory_editor.h>
 
 using namespace core;
-using namespace core::type::convert;
 using namespace imgui;
 
 namespace imgui {
@@ -52,7 +51,7 @@ MemoryEditor_::MemoryEditor_(const Napi::CallbackInfo& info) :
     m_edit{ std::make_unique<MemoryEditor>() } {}
 
 Napi::Value MemoryEditor_::getTypeId(const Napi::CallbackInfo& info) {
-    return core::type::fromTypeId<MemoryEditor_>(info.Env());
+    return fromTypeId<MemoryEditor_>(info.Env());
 }
 
 Napi::Value MemoryEditor_::toDebugString(const Napi::CallbackInfo& info) {
@@ -178,7 +177,7 @@ void MemoryEditor_::setHighlightColor(const Napi::CallbackInfo&, const Napi::Val
 Napi::Value MemoryEditor_::drawWindow(const Napi::CallbackInfo& info) {
     m_edit->DrawWindow(
         /* title */ asStrUtf8(info[0]).c_str(),
-        /* mem_data */ type::isInstanceOf<OpaquePointer>(info[1]) ? OpaquePointer::get(info[1]) : info[1].As<Napi::ArrayBuffer>().Data(),
+        /* mem_data */ isInstanceOf<OpaquePointer>(info[1]) ? OpaquePointer::get(info[1]) : info[1].As<Napi::ArrayBuffer>().Data(),
         /* mem_size */ UnsignedLargeInteger::get(info[2]),
         /* base_display_addr */ info[3].IsUndefined() ? 0 : UnsignedLargeInteger::get(info[3]));
     return info.Env().Undefined();
@@ -186,7 +185,7 @@ Napi::Value MemoryEditor_::drawWindow(const Napi::CallbackInfo& info) {
 
 Napi::Value MemoryEditor_::drawContents(const Napi::CallbackInfo& info) {
     m_edit->DrawContents(
-        /* mem_data */ type::isInstanceOf<OpaquePointer>(info[0]) ? OpaquePointer::get(info[0]) : info[0].As<Napi::ArrayBuffer>().Data(),
+        /* mem_data */ isInstanceOf<OpaquePointer>(info[0]) ? OpaquePointer::get(info[0]) : info[0].As<Napi::ArrayBuffer>().Data(),
         /* mem_size */ UnsignedLargeInteger::get(info[1]),
         /* base_display_addr */ info[2].IsUndefined() ? 0 : UnsignedLargeInteger::get(info[2]));
     return info.Env().Undefined();

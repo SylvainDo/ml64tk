@@ -1,9 +1,9 @@
-#include "core/type/convert.hpp"
+#include "core/convert.hpp"
 #include "gui/theme.hpp"
 #include "imgui/convert.hpp"
 #include "imgui/viewport.hpp"
 
-using namespace core::type::convert;
+using namespace core;
 using namespace imgui;
 
 int getColorScheme();

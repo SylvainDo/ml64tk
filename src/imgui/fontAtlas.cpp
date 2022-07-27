@@ -1,11 +1,11 @@
-#include "core/type/instanceOf.hpp"
+#include "core/instanceOf.hpp"
 #include "imgui/font.hpp"
 #include "imgui/fontAtlas.hpp"
 #include "imgui/fontConfig.hpp"
 
 #include <fmt/format.h>
 
-using namespace core::type::convert;
+using namespace core;
 
 namespace imgui {
 
@@ -50,7 +50,7 @@ Napi::Object FontAtlas::create(Napi::Env, ImFontAtlas* val) {
 FontAtlas::FontAtlas(const Napi::CallbackInfo& info) : Napi::ObjectWrap<FontAtlas>{ info } {}
 
 Napi::Value FontAtlas::getTypeId(const Napi::CallbackInfo& info) {
-    return core::type::fromTypeId<FontAtlas>(info.Env());
+    return fromTypeId<FontAtlas>(info.Env());
 }
 
 Napi::Value FontAtlas::toDebugString(const Napi::CallbackInfo& info) {

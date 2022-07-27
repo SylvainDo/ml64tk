@@ -1,4 +1,4 @@
-#include "core/type/instanceOf.hpp"
+#include "core/instanceOf.hpp"
 #include "core/opaquePointer.hpp"
 #include "gfx/texture.hpp"
 #include "imgui/convert.hpp"
@@ -10,7 +10,6 @@
 #include <SDL_opengl.h>
 
 using namespace core;
-using namespace core::type::convert;
 using namespace imgui;
 
 namespace gfx {
@@ -85,7 +84,7 @@ void Texture::load(int width, int height, void* pixels) {
 }
 
 Napi::Value Texture::getTypeId(const Napi::CallbackInfo& info) {
-    return core::type::fromTypeId<Texture>(info.Env());
+    return fromTypeId<Texture>(info.Env());
 }
 
 Napi::Value Texture::toDebugString(const Napi::CallbackInfo& info) {

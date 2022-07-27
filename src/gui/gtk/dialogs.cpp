@@ -1,4 +1,4 @@
-#include "core/type/convert.hpp"
+#include "core/convert.hpp"
 #include "gui/gtk/util.hpp"
 #include "gui/dialogs.hpp"
 #include "imgui/viewport.hpp"
@@ -14,7 +14,7 @@
 #include <imgui.h>
 #include <SDL_video.h>
 
-using namespace core::type::convert;
+using namespace core;
 using namespace imgui;
 
 namespace gui::dialogs {

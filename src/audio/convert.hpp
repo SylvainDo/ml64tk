@@ -1,6 +1,6 @@
 #pragma once
 
-#include "core/type/convert.hpp"
+#include "core/convert.hpp"
 
 #include <SFML/Audio/Music.hpp>
 
@@ -8,10 +8,8 @@ namespace audio {
 inline namespace convert {
 
 inline sf::Vector3f asVec3(const Napi::Value& val) {
-    using namespace core::type::convert;
-
-    const auto obj = valueAsObject(val);
-    return { asF32(obj.Get("x")), asF32(obj.Get("y")), asF32(obj.Get("z")) };
+    const auto obj = core::valueAsObject(val);
+    return { core::asF32(obj.Get("x")), core::asF32(obj.Get("y")), core::asF32(obj.Get("z")) };
 }
 
 inline sf::Vector3f asVec3Or(const Napi::Value& val, const sf::Vector3f& defaultVal) {
@@ -19,20 +17,16 @@ inline sf::Vector3f asVec3Or(const Napi::Value& val, const sf::Vector3f& default
 }
 
 inline Napi::Value fromVec3(Napi::Env env, const sf::Vector3f& val) {
-    using namespace core::type::convert;
-
     const auto obj = Napi::Object::New(env);
-    obj.Set("x", fromF32(env, val.x));
-    obj.Set("y", fromF32(env, val.y));
-    obj.Set("z", fromF32(env, val.z));
+    obj.Set("x", core::fromF32(env, val.x));
+    obj.Set("y", core::fromF32(env, val.y));
+    obj.Set("z", core::fromF32(env, val.z));
 
     return obj;
 }
 
 inline sf::Time asTime(const Napi::Value& val) {
-    using namespace core::type::convert;
-
-    return sf::milliseconds(asS32(val));
+    return sf::milliseconds(core::asS32(val));
 }
 
 inline sf::Time asTimeOr(const Napi::Value& val, sf::Time defaultVal) {
@@ -40,18 +34,14 @@ inline sf::Time asTimeOr(const Napi::Value& val, sf::Time defaultVal) {
 }
 
 inline Napi::Value fromTime(Napi::Env env, sf::Time val) {
-    using namespace core::type::convert;
-
-    return fromS32(env, val.asMilliseconds());
+    return core::fromS32(env, val.asMilliseconds());
 }
 
 inline sf::Music::TimeSpan asTimeSpan(const Napi::Value& val) {
-    using namespace core::type::convert;
-
-    const auto obj = valueAsObject(val);
+    const auto obj = core::valueAsObject(val);
     return sf::Music::TimeSpan{
-        sf::milliseconds(asS32(obj.Get("offset"))),
-        sf::milliseconds(asS32(obj.Get("length"))) };
+        sf::milliseconds(core::asS32(obj.Get("offset"))),
+        sf::milliseconds(core::asS32(obj.Get("length"))) };
 }
 
 inline sf::Music::TimeSpan asTimeSpanOr(const Napi::Value& val, const sf::Music::TimeSpan& defaultVal) {
@@ -59,11 +49,9 @@ inline sf::Music::TimeSpan asTimeSpanOr(const Napi::Value& val, const sf::Music:
 }
 
 inline Napi::Value fromTimeSpan(Napi::Env env, const sf::Music::TimeSpan& val) {
-    using namespace core::type::convert;
-
     const auto obj = Napi::Object::New(env);
-    obj.Set("offset", fromS32(env, val.offset.asMilliseconds()));
-    obj.Set("length", fromS32(env, val.length.asMilliseconds()));
+    obj.Set("offset", core::fromS32(env, val.offset.asMilliseconds()));
+    obj.Set("length", core::fromS32(env, val.length.asMilliseconds()));
 
     return obj;
 }

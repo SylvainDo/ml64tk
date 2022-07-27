@@ -1,10 +1,10 @@
 #include "audio/convert.hpp"
 #include "audio/music.hpp"
-#include "core/type/instanceOf.hpp"
+#include "core/instanceOf.hpp"
 
 #include <fmt/format.h>
 
-using namespace core::type::convert;
+using namespace core;
 
 namespace audio {
 
@@ -52,7 +52,7 @@ Napi::Object Music::initialize(Napi::Env env, Napi::Object exports) {
 Music::Music(const Napi::CallbackInfo& info) : Napi::ObjectWrap<Music>{ info } {}
 
 Napi::Value Music::getTypeId(const Napi::CallbackInfo& info) {
-    return core::type::fromTypeId<Music>(info.Env());
+    return fromTypeId<Music>(info.Env());
 }
 
 Napi::Value Music::toDebugString(const Napi::CallbackInfo& info) {

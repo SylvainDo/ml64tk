@@ -5,7 +5,6 @@
 
 using namespace audio;
 using namespace core;
-using namespace type::convert;
 using namespace imgui;
 
 namespace dollar {
