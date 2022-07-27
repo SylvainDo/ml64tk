@@ -4,11 +4,11 @@
 #include "appWindow.hpp"
 
 #include <fmt/format.h>
-#include <glad/glad.h>
 #include <imgui.h>
 #include <imgui_impl_opengl3.h>
 #include <imgui_impl_sdl.h>
 #include <SDL_image.h>
+#include <SDL_opengl.h>
 
 using namespace core::type::convert;
 
@@ -64,7 +64,7 @@ AppWindow::AppWindow(const Napi::CallbackInfo& info) :
     SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS , 1);
     SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES , 2);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
     SDL_GL_SetAttribute(SDL_GL_SHARE_WITH_CURRENT_CONTEXT, 1);
 
@@ -77,8 +77,8 @@ AppWindow::AppWindow(const Napi::CallbackInfo& info) :
         throw Napi::Error::New(info.Env(), fmt::format("failed to create gl context: {}", SDL_GetError()));
     SDL_GL_MakeCurrent(m_window.get(), m_glContext.get());
     SDL_GL_SetSwapInterval(0);
-    if (!gladLoadGLLoader(SDL_GL_GetProcAddress))
-        throw Napi::Error::New(info.Env(), "failed to create gl context");
+    // if (!gladLoadGLLoader(SDL_GL_GetProcAddress))
+    //     throw Napi::Error::New(info.Env(), "failed to create gl context");
 
     IMGUI_CHECKVERSION();
     m_imguiContext = ImGui::CreateContext();
@@ -94,7 +94,7 @@ AppWindow::AppWindow(const Napi::CallbackInfo& info) :
     io.UserData = &m_ioUserData;
     if (!ImGui_ImplSDL2_InitForOpenGL(m_window.get(), m_glContext.get()))
         throw Napi::Error::New(info.Env(), "failed to initialize imgui impl sdl2");
-    if (!ImGui_ImplOpenGL3_Init("#version 330"))
+    if (!ImGui_ImplOpenGL3_Init("#version 130"))
         throw Napi::Error::New(info.Env(), "failed to initialize imgui impl opengl3");
 }
 
