@@ -117,7 +117,6 @@ X(napi_check_object_type_tag) \
 X(napi_object_freeze) \
 X(napi_object_seal) \
 X(napi_module_register) \
-X(napi_fatal_error) \
 X(napi_async_init) \
 X(napi_async_destroy) \
 X(napi_make_callback) \
