@@ -2,15 +2,16 @@
 
 #include "core/type/convert.hpp"
 #include "core/type/instanceOf.hpp"
-#include "core/byteswap.hpp"
 
 #include <bit>
 #include <bitset>
 #include <cinttypes>
 #include <cstdint>
 #include <cstdlib>
-#include <sstream>
 #include <type_traits>
+
+#include <fmt/printf.h>
+#include <SDL_endian.h>
 
 namespace core {
 
@@ -21,7 +22,8 @@ using SignedLargeInteger = LargeInteger<true>;
 using UnsignedLargeInteger = LargeInteger<false>;
 
 template <bool Signed>
-struct LargeInteger : Napi::ObjectWrap<LargeInteger<Signed>> {
+class LargeInteger final : public Napi::ObjectWrap<LargeInteger<Signed>> {
+public:
     using ValueHighPartType = std::conditional_t<Signed, std::int32_t, std::uint32_t>;
     using ValueQuadPartType = std::conditional_t<Signed, std::int64_t, std::uint64_t>;
 
@@ -53,15 +55,15 @@ struct LargeInteger : Napi::ObjectWrap<LargeInteger<Signed>> {
         const auto class_ = ObjectWrap_t::DefineClass(env, className, {
             InstanceAccessor_<&LargeInteger::getTypeId>("typeId"),
             InstanceAccessor_<&LargeInteger::toDebugString>("debugString"),
+            InstanceAccessor_<&LargeInteger::ref>("ref"),
+            InstanceAccessor_<&LargeInteger::unref>("unref"),
 
             InstanceMethod_<&LargeInteger::toNumber>("toNumber"),
             InstanceMethod_<&LargeInteger::toString>("toString"),
             InstanceMethod_<&LargeInteger::toBigInt>("toBigInt"),
-
             InstanceAccessor_<&LargeInteger::getLowPart, &LargeInteger::setLowPart>("lowPart"),
             InstanceAccessor_<&LargeInteger::getHighPart, &LargeInteger::setHighPart>("highPart"),
             InstanceAccessor_<&LargeInteger::getBytes>("bytes"),
-
             InstanceMethod_<&LargeInteger::neg>("neg"),
             InstanceMethod_<&LargeInteger::add>("add"),
             InstanceMethod_<&LargeInteger::sub>("sub"),
@@ -137,18 +139,33 @@ struct LargeInteger : Napi::ObjectWrap<LargeInteger<Signed>> {
         if (info.Length() == 1) value = valueFrom(info[0]);
     }
 
+private:
     Napi::Value getTypeId(const Napi::CallbackInfo& info) {
         return core::type::fromTypeId<LargeInteger>(info.Env());
     }
 
     Napi::Value toDebugString(const Napi::CallbackInfo& info) {
         using namespace core::type::convert;
+        if constexpr (Signed) {
+            return fromStrUtf8(info.Env(), fmt::sprintf("SignedLargeInteger (value=%d; quadPart=%#x; lowPart=%#x; highPart=%#x)",
+                value.quadPart, value.quadPart, value.u.lowPart, value.u.highPart));
+        }
+        else {
+            return fromStrUtf8(info.Env(), fmt::sprintf("UnsignedLargeInteger (value=%u; quadPart=%#x; lowPart=%#x; highPart=%#x)",
+                value.quadPart, value.quadPart, value.u.lowPart, value.u.highPart));
+        }
+    }
 
-        std::ostringstream oss;
-        oss << std::dec << value.quadPart << std::hex << " (QuadPart: 0x" << value.quadPart
-            << " LowPart: 0x" << value.u.lowPart << " HighPart: 0x" << value.u.highPart << ")";
+    Napi::Value ref(const Napi::CallbackInfo& info) {
+        using namespace core::type::convert;
+        using ObjectWrap_t = Napi::ObjectWrap<LargeInteger<Signed>>;
+        return fromU32(info.Env(), ObjectWrap_t::Ref());
+    }
 
-        return fromStrUtf8(info.Env(), oss.str());
+    Napi::Value unref(const Napi::CallbackInfo& info) {
+        using namespace core::type::convert;
+        using ObjectWrap_t = Napi::ObjectWrap<LargeInteger<Signed>>;
+        return fromU32(info.Env(), ObjectWrap_t::Unref());
     }
 
     Napi::Value toNumber(const Napi::CallbackInfo& info) {
@@ -330,19 +347,19 @@ struct LargeInteger : Napi::ObjectWrap<LargeInteger<Signed>> {
         auto newValue = value;
 
         if (info.Length() == 0) {
-            newValue.quadPart = static_cast<ValueQuadPartType>(bswap64(static_cast<std::uint64_t>(newValue.quadPart)));
+            newValue.quadPart = static_cast<ValueQuadPartType>(SDL_Swap64(static_cast<std::uint64_t>(newValue.quadPart)));
         }
         else if (info.Length() == 1) {
             switch (/* width */ asS32(info[0])) {
             case 8: break;
             case 16:
-                newValue.quadPart = static_cast<ValueQuadPartType>(bswap16(static_cast<std::uint16_t>(newValue.quadPart)));
+                newValue.quadPart = static_cast<ValueQuadPartType>(SDL_Swap16(static_cast<std::uint16_t>(newValue.quadPart)));
                 break;
             case 32:
-                newValue.quadPart = static_cast<ValueQuadPartType>(bswap32(static_cast<std::uint32_t>(newValue.quadPart)));
+                newValue.quadPart = static_cast<ValueQuadPartType>(SDL_Swap32(static_cast<std::uint32_t>(newValue.quadPart)));
                 break;
             case 64:
-                newValue.quadPart = static_cast<ValueQuadPartType>(bswap64(static_cast<std::uint64_t>(newValue.quadPart)));
+                newValue.quadPart = static_cast<ValueQuadPartType>(SDL_Swap64(static_cast<std::uint64_t>(newValue.quadPart)));
                 break;
             default:
                 throw Napi::Error::New(info.Env(), "invalid width");

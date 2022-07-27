@@ -1,18 +1,15 @@
-type StringBase = 2 | 8 | 10 | 16;
-type BitwiseWidth = 8 | 16 | 32 | 64;
-
-type LargeIntegerOperand = LargeInteger | number | string | BigInt | [number /* lowPart */, number /* highPart */] | [string, StringBase];
+type LargeIntegerStringBase = 2 | 8 | 10 | 16;
+type LargeIntegerBitwiseWidth = 8 | 16 | 32 | 64;
+type LargeIntegerOperand = LargeInteger | number | string | bigint | [number /* lowPart */, number /* highPart */] | [string, LargeIntegerStringBase];
 
 interface LargeInteger {
     toNumber(): number;
     toString(): string;
     toString(base: number): string;
-    toBigInt(): BigInt;
-
-    lowPart: number; // get, set
-    highPart: number; // get, set
-    bytes: ArrayBuffer; // get
-
+    toBigInt(): bigint;
+    lowPart: number;
+    highPart: number;
+    bytes: ArrayBuffer;
     neg(): LargeInteger;
     add(rhs: LargeIntegerOperand): LargeInteger;
     sub(rhs: LargeIntegerOperand): LargeInteger;
@@ -32,14 +29,14 @@ interface LargeInteger {
     gt(rhs: LargeIntegerOperand): boolean;
     gte(rhs: LargeIntegerOperand): boolean;
     bswap(): LargeInteger;
-    bswap(width: BitwiseWidth): LargeInteger;
+    bswap(width: LargeIntegerBitwiseWidth): LargeInteger;
     bceil(): LargeInteger;
     bfloor(): LargeInteger;
     bwidth(): number;
     rotl(shift: number): LargeInteger;
-    rotl(shift: number, width: BitwiseWidth): LargeInteger;
+    rotl(shift: number, width: LargeIntegerBitwiseWidth): LargeInteger;
     rotr(shift: number): LargeInteger;
-    rotr(shift: number, width: BitwiseWidth): LargeInteger;
+    rotr(shift: number, width: LargeIntegerBitwiseWidth): LargeInteger;
     countlZero(): number;
     countlOne(): number;
     countrZero(): number;
