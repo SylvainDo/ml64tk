@@ -115,3 +115,7 @@ else()
 	add_subdirectory(napi-loader)
 	target_link_libraries(ml64tk PRIVATE napi-loader gtk)
 endif()
+
+add_custom_command(TARGET ml64tk PRE_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
+	"${CMAKE_SOURCE_DIR}/src/imconfig.h"
+	"${CMAKE_SOURCE_DIR}/vendor/imgui-docking/imconfig.h")

@@ -37,5 +37,3 @@ set_source_files_properties(${SRC} PROPERTIES SKIP_PRECOMPILE_HEADERS ON)
 
 find_package(freetype CONFIG REQUIRED)
 target_link_libraries(imgui INTERFACE freetype)
-
-file(COPY_FILE "${CMAKE_SOURCE_DIR}/cmake/imconfig.h" "${CMAKE_SOURCE_DIR}/vendor/imgui-docking/imconfig.h")
