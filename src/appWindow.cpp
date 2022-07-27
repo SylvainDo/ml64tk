@@ -49,6 +49,8 @@ AppWindow::AppWindow(const Napi::CallbackInfo& info) :
     m_window{ nullptr, SDL_DestroyWindow },
     m_glContext{ nullptr, SDL_GL_DeleteContext },
     m_icon{ nullptr, SDL_FreeSurface } {
+    const auto vsync = asBoolOr(info[0], false);
+    const auto viewports = asBoolOr(info[1], true);
 
     if (m_instance)
         throw Napi::Error::New(info.Env(), "only a single AppWindow instance is supported");
@@ -76,7 +78,7 @@ AppWindow::AppWindow(const Napi::CallbackInfo& info) :
     if (!m_glContext)
         throw Napi::Error::New(info.Env(), fmt::format("failed to create gl context: {}", SDL_GetError()));
     SDL_GL_MakeCurrent(m_window.get(), m_glContext.get());
-    SDL_GL_SetSwapInterval(0);
+    SDL_GL_SetSwapInterval(vsync);
     // if (!gladLoadGLLoader(SDL_GL_GetProcAddress))
     //     throw Napi::Error::New(info.Env(), "failed to create gl context");
 
@@ -84,7 +86,8 @@ AppWindow::AppWindow(const Napi::CallbackInfo& info) :
     m_imguiContext = ImGui::CreateContext();
     ImGui::SetCurrentContext(m_imguiContext);
     auto& io = ImGui::GetIO();
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard | ImGuiConfigFlags_DockingEnable | ImGuiConfigFlags_ViewportsEnable;
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard | ImGuiConfigFlags_DockingEnable;
+    if (viewports) io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
     ImGui::StyleColorsDark();
     auto& style = ImGui::GetStyle();
     if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
