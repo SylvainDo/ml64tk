@@ -106,12 +106,12 @@ export module $ {
     function v2lerp(from: Vec2, to: Vec2, t: number): Vec2;
     function v3lerp(from: Vec3, to: Vec3, t: number): Vec3;
     function v4lerp(from: Vec4, to: Vec4, t: number): Vec4;
-    function sli(v: LargeIntegerOperand): LargeInteger;
-    function slinum(v: LargeIntegerOperand): number;
-    function slibig(v: LargeIntegerOperand): bigint;
-    function uli(v: LargeIntegerOperand): LargeInteger;
-    function ulinum(v: LargeIntegerOperand): number;
-    function ulibig(v: LargeIntegerOperand): bigint;
+    function sli(value: LargeIntegerOperand): LargeInteger;
+    function slinum(value: LargeIntegerOperand): number;
+    function slibig(value: LargeIntegerOperand): bigint;
+    function uli(value: LargeIntegerOperand): LargeInteger;
+    function ulinum(value: LargeIntegerOperand): number;
+    function ulibig(value: LargeIntegerOperand): bigint;
 }
 
 export module Audio {
