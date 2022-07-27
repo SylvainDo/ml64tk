@@ -84,9 +84,12 @@ interface Vec4 {
 }
 
 export module $ {
+    function xy(): Vec2;
     function xy(x: number, y: number): Vec2;
+    function xyz(): Vec3;
     function xyz(x: number, y: number, z: number): Vec3;
     function xyz(xy: Vec2, z: number): Vec3;
+    function xyzw(): Vec4;
     function xyzw(x: number, y: number, z: number, w: number): Vec4;
     function xyzw(xy: Vec2, zw: Vec2): Vec4;
     function xyzw(xyz: Vec3, w: number): Vec4;
@@ -1650,6 +1653,6 @@ interface AppWindow {
 }
 
 export var AppWindow: {
-    new(): AppWindow;
+    new(vsync?: boolean, viewports?: boolean): AppWindow;
     ticks: number;
 };

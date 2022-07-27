@@ -1906,6 +1906,7 @@ Napi::Value colorConvertRGBtoHSV(const Napi::CallbackInfo& info) {
     outObj.Set("x", fromF32(info.Env(), h));
     outObj.Set("y", fromF32(info.Env(), s));
     outObj.Set("z", fromF32(info.Env(), v));
+    outObj.Set("w", inObj.Get("w"));
     return outObj;
 }
 
@@ -1917,6 +1918,7 @@ Napi::Value colorConvertHSVtoRGB(const Napi::CallbackInfo& info) {
     outObj.Set("x", fromF32(info.Env(), r));
     outObj.Set("y", fromF32(info.Env(), g));
     outObj.Set("z", fromF32(info.Env(), b));
+    outObj.Set("w", inObj.Get("w"));
     return outObj;
 }
 
