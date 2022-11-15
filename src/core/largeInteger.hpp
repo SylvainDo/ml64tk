@@ -199,8 +199,8 @@ private:
     }
 
     Napi::Value toBigInt(const Napi::CallbackInfo& info) {
-        if constexpr (Signed) return fromS64(info.Env(), value.u.highPart);
-        else return fromU64(info.Env(), value.u.highPart);
+        if constexpr (Signed) return fromS64(info.Env(), value.quadPart);
+        else return fromU64(info.Env(), value.quadPart);
     }
 
     Napi::Value getLowPart(const Napi::CallbackInfo& info) {
