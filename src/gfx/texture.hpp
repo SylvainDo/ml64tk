@@ -42,7 +42,7 @@ private:
     int m_width{}, m_height{};
 
     void create();
-    void load(int width, int height, void* pixels);
+    void load(int width, int height, void* pixels, unsigned format);
 
     Napi::Value getTypeId(const Napi::CallbackInfo& info);
     Napi::Value toDebugString(const Napi::CallbackInfo& info);
@@ -53,6 +53,7 @@ private:
     Napi::Value loadFromFile(const Napi::CallbackInfo& info);
     Napi::Value loadFromMemory(const Napi::CallbackInfo& info);
     Napi::Value loadFromRGBA32(const Napi::CallbackInfo& info);
+    Napi::Value loadFromBGRA32(const Napi::CallbackInfo& info);
     Napi::Value getId(const Napi::CallbackInfo& info);
     Napi::Value getSize(const Napi::CallbackInfo& info);
 };

@@ -1612,6 +1612,7 @@ export module Gfx {
         loadFromFile(filename: string): void;
         loadFromMemory(data: Uint8Array): void;
         loadFromRGBA32(width: number, height: number, data: Uint8Array): void;
+        loadFromBGRA32(width: number, height: number, data: Uint8Array): void;
         id: OpaquePointer;
         size: Vec2;
     }

@@ -28,6 +28,7 @@ Napi::Object Texture::initialize(Napi::Env env, Napi::Object exports) {
         InstanceMethod<&Texture::loadFromFile>("loadFromFile"),
         InstanceMethod<&Texture::loadFromMemory>("loadFromMemory"),
         InstanceMethod<&Texture::loadFromRGBA32>("loadFromRGBA32"),
+        InstanceMethod<&Texture::loadFromBGRA32>("loadFromBGRA32"),
         InstanceAccessor<&Texture::getId>("id"),
         InstanceAccessor<&Texture::getSize>("size")
     });
@@ -42,7 +43,7 @@ Napi::Object Texture::initialize(Napi::Env env, Napi::Object exports) {
 Napi::Object Texture::create(Napi::Env, int width, int height, void* pixels) {
     const auto obj = m_ctor.New({});
     auto instance = unwrap(obj);
-    instance->load(width, height, pixels);
+    instance->load(width, height, pixels, GL_RGBA);
     return obj;
 }
 
@@ -74,10 +75,10 @@ void Texture::create() {
     m_id = id;
 }
 
-void Texture::load(int width, int height, void* pixels) {
+void Texture::load(int width, int height, void* pixels, unsigned format) {
     if (!m_id) create();
     glBindTexture(GL_TEXTURE_2D, m_id.value());
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, format, GL_UNSIGNED_BYTE, pixels);
     glBindTexture(GL_TEXTURE_2D, 0);
     m_width = width;
     m_height = height;
@@ -109,7 +110,7 @@ Napi::Value Texture::loadFromFile(const Napi::CallbackInfo& info) {
     std::unique_ptr<SDL_Surface, decltype(&SDL_FreeSurface)> surface{ IMG_Load(filename.c_str()), SDL_FreeSurface };
     if (!surface) throw Napi::Error::New(info.Env(), fmt::format("failed to load texture from file `{}`: {}", filename, IMG_GetError()));
     surface.reset(SDL_ConvertSurfaceFormat(surface.get(), SDL_PIXELFORMAT_RGBA32, 0));
-    load(surface->w, surface->h, surface->pixels);
+    load(surface->w, surface->h, surface->pixels, GL_RGBA);
     return info.Env().Undefined();
 }
 
@@ -118,14 +119,23 @@ Napi::Value Texture::loadFromMemory(const Napi::CallbackInfo& info) {
     std::unique_ptr<SDL_Surface, decltype(&SDL_FreeSurface)> surface{ IMG_Load_RW(SDL_RWFromMem(data.Data(), data.ByteLength()), true), SDL_FreeSurface };
     if (!surface) throw Napi::Error::New(info.Env(), fmt::format("failed to load texture from memory: {}", IMG_GetError()));
     surface.reset(SDL_ConvertSurfaceFormat(surface.get(), SDL_PIXELFORMAT_RGBA32, 0));
-    load(surface->w, surface->h, surface->pixels);
+    load(surface->w, surface->h, surface->pixels, GL_RGBA);
     return info.Env().Undefined();
 }
 
 Napi::Value Texture::loadFromRGBA32(const Napi::CallbackInfo& info) {
     load(/* width */ asS32(info[0]),
          /* height */ asS32(info[1]),
-         /* pixels */ info[2].As<Napi::Uint8Array>().Data());
+         /* pixels */ info[2].As<Napi::Uint8Array>().Data(),
+                     GL_RGBA);
+    return info.Env().Undefined();
+}
+
+Napi::Value Texture::loadFromBGRA32(const Napi::CallbackInfo& info) {
+    load(/* width */ asS32(info[0]),
+         /* height */ asS32(info[1]),
+         /* pixels */ info[2].As<Napi::Uint8Array>().Data(),
+                     GL_BGRA);
     return info.Env().Undefined();
 }
 
