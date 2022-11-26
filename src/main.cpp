@@ -3,7 +3,9 @@
 #include "core/opaquePointer.hpp"
 #include "dollar/dollar.hpp"
 #include "gfx/gfx.hpp"
+#ifndef NOGUI
 #include "gui/gui.hpp"
+#endif
 #include "imgui/imgui.hpp"
 #include "appWindow.hpp"
 
@@ -26,8 +28,10 @@ static struct AutoDpiAware {
 extern "C" __declspec(dllexport) DWORD NvOptimusEnablement = 0x00000001;
 extern "C" __declspec(dllexport) DWORD AmdPowerXpressRequestHighPerformance = 0x00000001;
 #else
+#ifndef NOGUI
 #include <gtk/gtk.h>
 namespace gui::theme { void initialize(Napi::Env env); }
+#endif
 #endif
 
 static void initialize(Napi::Env env) {
@@ -45,11 +49,13 @@ static void initialize(Napi::Env env) {
     SDL_DisableScreenSaver();
 #ifndef _WIN32
     setenv("LC_ALL", "en_US.UTF-8", true);
+#ifndef NOGUI
     if (setenv("GSK_RENDERER", "cairo", true) != 0)
         throw Napi::Error::New(env, "failed to override GSK_RENDERER environment variable");
     if (!gtk_init_check())
         throw Napi::Error::New(env, "failed to initialize gtk");
     gui::theme::initialize(env);
+#endif
 #endif
 }
 
@@ -70,7 +76,9 @@ Napi::Object initModule(Napi::Env env, Napi::Object exports) {
     exports.Set("$", dollar::initialize(env, Napi::Object::New(env)));
     exports.Set("Audio", audio::initialize(env, Napi::Object::New(env)));
     exports.Set("ImGui", imgui::initialize(env, Napi::Object::New(env)));
+#ifndef NOGUI
     exports.Set("Gui", gui::initialize(env, Napi::Object::New(env)));
+#endif
     exports.Set("Gfx", gfx::initialize(env, Napi::Object::New(env)));
     AppWindow::initialize(env, exports);
 

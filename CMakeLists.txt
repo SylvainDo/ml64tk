@@ -1,16 +1,20 @@
 cmake_minimum_required(VERSION 3.20)
 project(ml64tk)
 
+option(NOGUI "Disable Gui module" OFF)
+
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 include(initProject)
 setup_project_vars()
 include(importGlad)
 include(importImGui)
 include(importNode)
-if(WIN32)
-	include(importWinrtTheming)
-else()
-	include(importGtk)
+if(NOT NOGUI)
+    if(WIN32)
+        include(importWinrtTheming)
+    elseif(UNIX)
+	    include(importGtk)
+    endif()
 endif()
 
 set(SRC
@@ -38,10 +42,6 @@ set(SRC
 	"src/gfx/gfx.hpp"
 	"src/gfx/texture.cpp"
 	"src/gfx/texture.hpp"
-	"src/gui/dialogs.hpp"
-	"src/gui/gui.cpp"
-	"src/gui/gui.hpp"
-	"src/gui/theme.hpp"
 	"src/imgui/convert.hpp"
 	"src/imgui/drawList.cpp"
 	"src/imgui/drawList.hpp"
@@ -82,18 +82,27 @@ set(SRC
 	"src/appWindow.hpp"
 	"src/main.cpp"
 	)
-if(WIN32)
-    set(PLATFORM_SRC
-		"src/gui/win32/dialogs.cpp"
-		"src/gui/win32/theme.cpp"
-		"app.manifest"
-		)
-elseif(UNIX)
-	set(PLATFORM_SRC
-		"src/gui/gtk/dialogs.cpp"
-		"src/gui/gtk/theme.cpp"
-		"src/gui/gtk/util.hpp"
-		)
+if(NOT NOGUI)
+    set(GUI_SRC
+        "src/gui/dialogs.hpp"
+        "src/gui/gui.cpp"
+        "src/gui/gui.hpp"
+        "src/gui/theme.hpp"
+        )
+
+    if(WIN32)
+        list(APPEND GUI_SRC
+            "src/gui/win32/dialogs.cpp"
+            "src/gui/win32/theme.cpp"
+            "app.manifest"
+            )
+    elseif(UNIX)
+        list(APPEND GUI_SRC
+            "src/gui/gtk/dialogs.cpp"
+            "src/gui/gtk/theme.cpp"
+            "src/gui/gtk/util.hpp"
+		    )
+    endif()
 endif()
 
 find_package(fmt CONFIG REQUIRED)
@@ -103,17 +112,24 @@ find_package(SDL2_image CONFIG REQUIRED)
 find_package(SDL2_ttf CONFIG REQUIRED)
 find_package(SFML COMPONENTS audio CONFIG REQUIRED)
 
-add_library(ml64tk SHARED ${SRC} ${PLATFORM_SRC})
+add_library(ml64tk SHARED ${SRC} ${GUI_SRC})
 target_include_directories(ml64tk PRIVATE "${CMAKE_SOURCE_DIR}/src")
 target_link_libraries(ml64tk PRIVATE fmt::fmt SDL2::SDL2 OpenGL::GL glad imgui SDL2_image::SDL2_image-static SDL2_ttf::SDL2_ttf-static sfml-audio)
 configure_node_module(ml64tk)
 
-if (WIN32)
+if(WIN32 AND NOT NOGUI)
 	add_dependencies(ml64tk winrt-theming)
 	target_link_libraries(ml64tk PRIVATE winrt-theming::lib)
-else()
+elseif(UNIX)
 	add_subdirectory(napi-loader)
-	target_link_libraries(ml64tk PRIVATE napi-loader gtk)
+    target_link_libraries(ml64tk PRIVATE napi-loader)
+    if(NOT NOGUI)
+	    target_link_libraries(ml64tk PRIVATE gtk)
+    endif()
+endif()
+
+if(NOGUI)
+    target_compile_definitions(ml64tk PRIVATE NOGUI)
 endif()
 
 add_custom_command(TARGET ml64tk PRE_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
