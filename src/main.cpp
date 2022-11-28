@@ -50,11 +50,13 @@ static void initialize(Napi::Env env) {
 #ifndef _WIN32
     setenv("LC_ALL", "en_US.UTF-8", true);
 #ifndef NOGUI
-    if (setenv("GSK_RENDERER", "cairo", true) != 0)
-        throw Napi::Error::New(env, "failed to override GSK_RENDERER environment variable");
-    if (!gtk_init_check())
-        throw Napi::Error::New(env, "failed to initialize gtk");
-    gui::theme::initialize(env);
+    if (!getenv("_tkNoGtk")) {
+        if (setenv("GSK_RENDERER", "cairo", true) != 0)
+            throw Napi::Error::New(env, "failed to override GSK_RENDERER environment variable");
+        if (!gtk_init_check())
+            throw Napi::Error::New(env, "failed to initialize gtk");
+        gui::theme::initialize(env);
+    }
 #endif
 #endif
 }

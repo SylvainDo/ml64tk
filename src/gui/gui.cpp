@@ -31,6 +31,7 @@ Napi::Value openUrl(const Napi::CallbackInfo& info) {
 }
 
 Napi::Object initialize(Napi::Env env, Napi::Object exports) {
+#ifdef _WIN32
     using namespace dialogs;
     exports.Set("getOpenFileName", Napi::Function::New(env, getOpenFileName));
     exports.Set("getOpenFileNames", Napi::Function::New(env, getOpenFileNames));
@@ -42,11 +43,28 @@ Napi::Object initialize(Napi::Env env, Napi::Object exports) {
     using namespace theme;
     exports.Set("getColorScheme", Napi::Function::New(env, getColorScheme));
     exports.Set("getAccentColor", Napi::Function::New(env, getAccentColor));
-
-#ifdef _WIN32
     exports.Set("useImmersiveDarkMode", Napi::Function::New(env, useImmersiveDarkMode));
 #else
-    exports.Set("getGtkTheme", Napi::Function::New(env, getGtkTheme));
+    const auto gtkEnabled = !getenv("_tkNoGtk");
+#define MaybeUnsupportedFunc(x) \
+    exports.Set(#x, Napi::Function::New(env, gtkEnabled ? x : \
+    [](const Napi::CallbackInfo& info) { \
+        throw Napi::Error::New(info.Env(), fmt::format("Gui.{} not implemented: gtk was not initialized", #x)); \
+        return info.Env().Undefined(); \
+    }))
+
+    using namespace dialogs;
+    MaybeUnsupportedFunc(getOpenFileName);
+    MaybeUnsupportedFunc(getOpenFileNames);
+    MaybeUnsupportedFunc(getSaveFileName);
+    MaybeUnsupportedFunc(getExistingDirectory);
+    MaybeUnsupportedFunc(getExistingDirectories);
+    MaybeUnsupportedFunc(showMessageBox);
+
+    using namespace theme;
+    MaybeUnsupportedFunc(getColorScheme);
+    MaybeUnsupportedFunc(getAccentColor);
+    MaybeUnsupportedFunc(getGtkTheme);
 #endif
 
     exports.Set("openUrl", Napi::Function::New(env, openUrl));
