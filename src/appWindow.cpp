@@ -147,6 +147,8 @@ void AppWindow::doStep(Napi::Env env) {
 }
 
 void AppWindow::doFrame() {
+    m_drawing = true;
+
     call(Callback::BeforeNewFrame);
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplSDL2_NewFrame();
@@ -171,6 +173,7 @@ void AppWindow::doFrame() {
     }
 
     SDL_GL_SwapWindow(m_window.get());
+    m_drawing = false;
 }
 
 void AppWindow::call(Callback callback, const std::initializer_list<napi_value>& args) {
@@ -180,7 +183,7 @@ void AppWindow::call(Callback callback, const std::initializer_list<napi_value>&
 
 int AppWindow::eventWatch(void* userdata, SDL_Event* event) {
     auto thisx = static_cast<AppWindow*>(userdata);
-    if (std::this_thread::get_id() == thisx->m_threadId && event->type == SDL_WINDOWEVENT
+    if (!thisx->m_drawing && std::this_thread::get_id() == thisx->m_threadId && event->type == SDL_WINDOWEVENT
         && (event->window.event == SDL_WINDOWEVENT_SIZE_CHANGED || event->window.event == SDL_WINDOWEVENT_MOVED))
         thisx->doFrame();
     return 0;

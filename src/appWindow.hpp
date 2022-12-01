@@ -53,7 +53,7 @@ private:
     imgui::IOUserData m_ioUserData;
     std::array<std::unique_ptr<Napi::FunctionReference>, Callback::NumCallbacks> m_callbacks;
     ImColor m_clearColor{ 0.45f, 0.55f, 0.6f, 0.0f };
-    bool m_inited{}, m_done{};
+    bool m_inited{}, m_done{}, m_drawing{};
 
     void doStep(Napi::Env env);
     void doFrame();
