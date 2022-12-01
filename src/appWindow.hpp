@@ -83,4 +83,7 @@ private:
     void setMaximumSize(const Napi::CallbackInfo&, const Napi::Value& val);
     Napi::Value getClearColor(const Napi::CallbackInfo& info);
     void setClearColor(const Napi::CallbackInfo&, const Napi::Value& val);
+    Napi::Value isVisible(const Napi::CallbackInfo& info);
+    Napi::Value hide(const Napi::CallbackInfo& info);
+    Napi::Value show(const Napi::CallbackInfo& info);
 };

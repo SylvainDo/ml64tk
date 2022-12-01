@@ -1652,6 +1652,9 @@ interface AppWindow {
     minimumSize: Vec2;
     maximumSize: Vec2;
     clearColor: Vec4;
+    isVisible(): boolean;
+    hide(): void;
+    show(): void;
 }
 
 export var AppWindow: {

@@ -35,7 +35,10 @@ Napi::Object AppWindow::initialize(Napi::Env env, Napi::Object exports) {
         InstanceAccessor<&AppWindow::getSize, &AppWindow::setSize>("size"),
         InstanceAccessor<&AppWindow::getMinimumSize, &AppWindow::setMinimumSize>("minimumSize"),
         InstanceAccessor<&AppWindow::getMaximumSize, &AppWindow::setMaximumSize>("maximumSize"),
-        InstanceAccessor<&AppWindow::getClearColor, &AppWindow::setClearColor>("clearColor")
+        InstanceAccessor<&AppWindow::getClearColor, &AppWindow::setClearColor>("clearColor"),
+        InstanceMethod<&AppWindow::isVisible>("isVisible"),
+        InstanceMethod<&AppWindow::hide>("hide"),
+        InstanceMethod<&AppWindow::show>("show")
     });
 
     m_ctor = Napi::Persistent(class_);
@@ -307,4 +310,18 @@ Napi::Value AppWindow::getClearColor(const Napi::CallbackInfo& info) {
 
 void AppWindow::setClearColor(const Napi::CallbackInfo&, const Napi::Value& val) {
     m_clearColor = imgui::asColor(val);
+}
+
+Napi::Value AppWindow::isVisible(const Napi::CallbackInfo& info) {
+    return fromBool(info.Env(), SDL_GetWindowFlags(m_window.get()) & SDL_WINDOW_SHOWN);
+}
+
+Napi::Value AppWindow::hide(const Napi::CallbackInfo& info) {
+    SDL_HideWindow(m_window.get());
+    return info.Env().Undefined();
+}
+
+Napi::Value AppWindow::show(const Napi::CallbackInfo& info) {
+    SDL_ShowWindow(m_window.get());
+    return info.Env().Undefined();
 }
