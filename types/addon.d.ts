@@ -1,6 +1,12 @@
 type LargeIntegerStringBase = 2 | 8 | 10 | 16;
 type LargeIntegerBitwiseWidth = 8 | 16 | 32 | 64;
-type LargeIntegerOperand = LargeInteger | number | string | bigint | [number /* lowPart */, number /* highPart */] | [string, LargeIntegerStringBase];
+type LargeIntegerOperand =
+    LargeInteger
+    | number
+    | string
+    | bigint
+    | [number /* lowPart */, number /* highPart */]
+    | [string, LargeIntegerStringBase];
 
 interface LargeInteger {
     toNumber(): number;
@@ -1636,13 +1642,14 @@ export module Gfx {
     };
 }
 
-type AppCallbackName = 'init' | 'before-new-frame' | 'new-frame' | 'before-render' | 'render' | 'drop-file';
+type AppCallbackName = 'init' | 'before-new-frame' | 'new-frame' | 'before-render' | 'render' | 'drop-file' | 'close';
 type AppCallbackVoid = () => void;
 type AppCallbackDropFile = (filename: string, viewport: ImGui.Viewport) => void;
+type AppCallbackClose = () => boolean;
 
 interface AppWindow {
     equals(other: AppWindow): boolean;
-    on(name: AppCallbackName, callback?: AppCallbackVoid | AppCallbackDropFile): void;
+    on(name: AppCallbackName, callback?: AppCallbackVoid | AppCallbackDropFile | AppCallbackClose): void;
     doIteration(): boolean;
     close(): void;
     title: string;

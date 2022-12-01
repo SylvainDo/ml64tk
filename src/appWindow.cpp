@@ -187,8 +187,13 @@ int AppWindow::eventWatch(void* userdata, SDL_Event* event) {
 }
 
 void AppWindow::closeReal() {
-    SDL_HideWindow(m_window.get());
-    m_done = true;
+    auto& func = m_callbacks[Callback::Close];
+    const auto shouldClose = !(func && !func->IsEmpty()) || asBool(func->Call({}));
+
+    if (shouldClose) {
+        SDL_HideWindow(m_window.get());
+        m_done = true;
+    }
 }
 
 Napi::Value AppWindow::getTicks(const Napi::CallbackInfo& info) {
@@ -230,6 +235,7 @@ Napi::Value AppWindow::on(const Napi::CallbackInfo& info) {
     else if (name == "before-render") callback = &m_callbacks[Callback::BeforeRender];
     else if (name == "render") callback = &m_callbacks[Callback::Render];
     else if (name == "drop-file") callback = &m_callbacks[Callback::DropFile];
+    else if (name == "close") callback = &m_callbacks[Callback::Close];
     else throw Napi::Error::New(info.Env(), "invalid callback name");
     *callback = std::make_unique<Napi::FunctionReference>();
     if (!info[1].IsUndefined())

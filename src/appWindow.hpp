@@ -39,6 +39,7 @@ private:
         BeforeRender,
         Render,
         DropFile,
+        Close,
         NumCallbacks
     };
 
