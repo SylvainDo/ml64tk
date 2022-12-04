@@ -117,9 +117,6 @@ void AppWindow::doStep(Napi::Env env) {
 
     if (!m_inited) {
         call(Callback::Init);
-        SDL_SetWindowPosition(m_window.get(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
-        SDL_ShowWindow(m_window.get());
-        SDL_FlashWindow(m_window.get(), SDL_FLASH_UNTIL_FOCUSED);
 #ifdef _WIN32
         SDL_AddEventWatch(eventWatch, this);
 #endif
